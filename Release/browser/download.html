@@ -1,0 +1,77 @@
+<html>
+<head>
+<link href="css/style.css" rel="stylesheet" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></head>
+<body>
+<div id="container">
+<div id="header"></div>
+<div id="miniBtn"></div>
+<div id="closeBtn"></div>
+<div id="devBtn"></div>
+<div id="title">开始下载</div>
+<div id="progress_bar"><div id="progress"></div><div id="progressAni"></div></div>
+</div>
+<script>
+closeBtn.onclick=function(){
+	webtop.closeHandler();
+}
+miniBtn.onclick=function(){
+	webtop.mini();
+}
+var contentLength=-1;
+var byteCount=0;
+var start=function(length){
+	contentLength=length;
+	if(contentLength!=-1&&id){
+		clearInterval(id);
+		id=0;
+		progressAni.style.display='none';
+	}
+}
+var setProgress=function(size){
+	byteCount+=size;
+	if(contentLength!=-1){
+		progress.style.width=parseInt(186*byteCount/contentLength)+'px';
+	}
+}
+devBtn.onclick=function(){
+	webtop.showDev();
+}
+var complete=function(){
+	title.innerHTML='下载完成';
+	if(contentLength==-1&&id){
+		clearInterval(id);
+		id=0;
+		progressAni.style.display='none';
+	}
+	progress.style.width='186px';
+	console.log('complete');
+}
+var i=0;
+var id=setInterval(function(){++i;progressAni.style.left=i+'px';if(i>=130){i=5;}},10);
+window.onload=function(){
+	setTimeout(function(){
+		webtop.move(300,300);
+		webtop.setSize(230,100);
+		webtop.ready();
+		setTimeout(function(){if(window['parentWindow'])webtop.close(parentWindow);},0);
+            //setTimeout(function () { webtop.close(parentWindow); }, 0);
+	},100);
+}
+webtop.closeHandler=function(){
+	webtop.close();
+}
+header.onmousedown=function(){
+	webtop.drag();
+}
+header.onmouseup=function(){
+	webtop.stopDrag();
+
+}
+var sizeHandler=function(){
+	container.style.height=e.detail.height-12+'px';
+}
+addEventListener('webtopWindowResize',sizeHandler);
+</script>
+</body>
+</html>

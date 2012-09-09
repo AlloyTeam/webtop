@@ -1,0 +1,10 @@
+[BASE]
+url=http://alloyteam.github.com/StreetFighter/
+width=962
+height=567
+enableDrag=1
+hasBorder=1
+disableTransparent=1
+x=100
+y=100
+name=Ω÷Õ∑∞‘Õı

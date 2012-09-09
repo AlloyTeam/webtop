@@ -1,0 +1,29 @@
+<html>
+<head>
+<style>
+.ball{
+	width:128px;
+	height:128px;
+	background:url(images/Globe.png);
+	top:50%;
+	position:absolute;
+	margin-top:-64px;
+	left:50%;
+	margin-left:-64px;
+	-webkit-mask-size: 30px 30px;
+	-webkit-animation-name: rotate;
+	-webkit-animation-duration: 1.5s;
+	-webkit-animation-iteration-count: infinite;
+	-webkit-animation-timing-function: linear;
+}
+
+@-webkit-keyframes rotate {
+  from {-webkit-transform:rotate(0deg);}
+  to {-webkit-transform:rotate(360deg);}
+}
+</style>
+</head>
+<body>
+<div class="ball"></div>
+</body>
+</html>

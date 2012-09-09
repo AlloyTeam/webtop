@@ -1,0 +1,263 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>尺子</title>
+<style>
+html,body{
+	margin:0;
+	padding:0;
+}
+.container{
+	width:1001px;
+	height:100px;
+	background:url(ruler.png);
+	position:absolute;
+	left:3px;
+	top:453px;
+	overflow:hidden;
+}
+.container1{
+	width:100px;
+	height:1001px;
+	background:url(ruler0.png);
+	position:relative;
+	overflow:hidden;
+}
+.r{
+	cursor:pointer;
+	position:absolute;
+	left:5px;
+	bottom:5px;
+}
+.r1{
+	cursor:pointer;
+	position:absolute;
+	right:5px;
+	top:15px;
+}
+#closeBtn{
+	position:absolute;
+	background:url(close.png);
+	width:8px;
+	height:8px;
+	cursor:pointer;
+}
+#miniBtn{
+	position:absolute;
+	width:8px;
+	height:8px;
+	cursor:pointer;
+}
+.mini{
+	right:15px;
+	bottom:5px;
+}
+.mini1{
+	right:15px;
+	top:5px;
+}
+.close{
+	right:5px;
+	bottom:5px;
+}
+.close1{
+	right:5px;
+	top:5px;
+}
+.n{
+	width:99px;
+	display:inline-block;
+	text-align:right;
+	padding-top:50px;
+	border-right:1px solid #000;
+}
+.n1{
+	height:19px;
+	display:inline-block;
+	text-align:left;
+	padding-left:50px;
+	padding-top:80px;
+	border-bottom:1px solid #000;
+}
+#nc{
+	padding-left:1px;
+	padding-top:1px;
+}
+#line{
+	position:absolute;
+}
+.line{
+	left:0;
+	top:0;
+	min-width:1px;
+	padding-top:70px;
+	height:10px;
+	border-left:1px solid #000;
+}
+.line1{
+	left:0;
+	top:0;
+	min-height:1px;
+	width:80px;
+	text-align:right;
+	border-top:1px solid #000;
+}
+#rotateBtn{
+	background:url(refresh.png);
+	width:48px;
+	height:48px;
+	position:absolute;
+	right:120px;
+	top:50px;
+}
+.wraper{
+	width:1005px;
+	height:1005px;
+	position:relative;
+}
+#dragEl{
+	position:absolute;
+	cursor:move;
+	width:100%;
+	height:100%;
+	top:0;
+	left:0;
+	cursor:pointer;
+}
+#resetBtn{
+	background:url(undo_blue.png);
+	width:48px;
+	height:48px;
+	position:absolute;
+	right:230px;
+	top:50px;
+	cursor:pointer;
+}
+</style>
+</head>
+<body>
+<div class="wraper">
+<div class="container" id="container">
+<div id="nc"><div class="n">100</div><div class="n">200</div></div>
+<div id="line" class="line"></div>
+<div id="dragEl"></div>
+<span id="r" class="r" style="cursor:pointer">r</span>
+<div id="closeBtn" class="close"></div>
+<div id="miniBtn" class="mini">-</div>
+<div id="rotateBtn"></div>
+<div id="resetBtn"></div>
+</div>
+</div>
+<script>
+r.onclick=function(){
+	if(container.className=='container'){
+		container.className='container1';
+		if(window['webtop']!=undefined){
+			//webtop.setSize(100,1001);
+		}
+		r.className='r1';
+		var ns=nc.getElementsByTagName('div');
+		for(var i=0;i<ns.length;++i){
+			ns[i].className='n1';
+		}
+		line.className='line1';
+		line.style.left=0;
+		closeBtn.className='close1';
+		miniBtn.className='mini1';
+	}
+	else{
+		container.className='container';
+		if(window['webtop']!=undefined){
+			//webtop.setSize(1001,100);
+		}
+		var ns=nc.getElementsByTagName('div');
+		for(var i=0;i<ns.length;++i){
+			ns[i].className='n';
+		}
+		r.className='r';
+		line.className='line';
+		line.style.top=0;
+		closeBtn.className='close';
+		miniBtn.className='mini';
+	}
+}
+closeBtn.onclick=function(){
+	webtop.close();
+}
+miniBtn.onclick=function(){
+	webtop.mini();
+}
+function createN(){
+	var s=[];
+	for(var i=1;i<=10;++i){
+		s.push('<div class="n">');
+		s.push(i*100);
+		s.push('</div>');
+	}
+	nc.innerHTML=s.join('');
+}
+document.onkeydown = function(k) {
+	var pos=webtop.getPos();
+	switch (k.keyCode) {
+		case 37:
+			webtop.move(pos.x-1,pos.y);
+			break;
+		case 38:
+			webtop.move(pos.x,pos.y-1);
+			break;
+		case 39:
+			webtop.move(pos.x+1,pos.y);
+			break;
+		case 40:
+			webtop.move(pos.x,pos.y+1);
+	}
+}
+var rotation=0;
+document.onmousemove=function(e){
+	if(rotating){
+		rotation = Math.atan((e.pageY-528.5)/(e.pageX-503))*180/Math.PI;
+		container.style.webkitTransform='rotate('+rotation+'deg)';
+	}
+	else{
+		if(container.className=='container'){
+			line.style.left=e.pageX+'px';
+			line.innerHTML=e.pageX;
+		}
+		else{
+			line.style.top=e.pageY+'px';
+			line.innerHTML=e.pageY;
+		}
+	}
+}
+document.onmouseup=function(){
+	rotating=false;
+	if(window['wraper'])wraper.style.background='none';
+}
+document.onselectstart=function(){
+	return false;
+}
+createN();
+var readyHandler=function(){
+	webtop.setTopMost();
+	setTimeout('webtop.toImage("screen.png")',0);
+}
+addEventListener("webtopReady",readyHandler);
+var rotating=false;
+rotateBtn.onmousedown=function(){
+	rotating=true;
+	wraper.style.background='rgba(0,0,0,0.005)';
+}
+dragEl.onmousedown=function(){
+	webtop.drag();
+}
+dragEl.onmouseup=function(){
+	webtop.stopDrag();
+}
+resetBtn.onclick=function(){
+	rotation = 0;
+	container.style.webkitTransform='';
+}
+</script>
+</body>
+</html>

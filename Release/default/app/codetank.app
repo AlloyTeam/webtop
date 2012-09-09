@@ -1,0 +1,10 @@
+[BASE]
+url=http://codetank.alloyteam.com
+width=800
+height=600
+enableDrag=1
+enableResize=1
+disableTransparent=1
+hasBorder=1
+max=1
+name=´úÂëÌ¹¿Ë

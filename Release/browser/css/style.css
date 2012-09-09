@@ -1,0 +1,144 @@
+html,body{
+	margin:0;
+}
+#container{
+	margin:5px;
+	width:calc(100% - 10px);
+	height:288px;
+	background:url(../images/glass.png) center center;
+	background-size:cover;
+	position:relative;
+	border:1px solid rgba(255,255,255,0.3);
+	box-shadow: 0px 0px 5px 2px rgba(128, 128, 128, 0.5);
+	border-radius:5px;
+}
+#header{
+	position:absolute;
+	left:5px;
+	top:5px;
+	right:5px;
+	height:25px;
+	cursor:move;
+}
+#closeBtn{
+	position:absolute;
+	right:5px;
+	top:5px;
+	width:20px;
+	height:20px;
+	background:url(../images/close.png) no-repeat;
+	background-size:contain;
+	cursor:pointer;
+	opacity:0.8;
+}
+#miniBtn{
+	position:absolute;
+	right:30px;
+	top:5px;
+	width:20px;
+	height:20px;
+	background:url(../images/btn.png) no-repeat;
+	background-size:contain;
+	cursor:pointer;
+	opacity:0.8;
+}
+#devBtn{
+	position:absolute;
+	right:80px;
+	top:5px;
+	width:20px;
+	height:20px;
+	background:url(../images/setting.png) no-repeat;
+	background-size:contain;
+	cursor:pointer;
+	opacity:0.8;
+}
+#makeBtn{
+	position:absolute;
+	right:110px;
+	top:5px;
+	width:20px;
+	height:20px;
+	background:url(../images/apps.png) no-repeat;
+	background-size:contain;
+	cursor:pointer;
+	opacity:0.8;
+}
+#refreshBtn{
+	position:absolute;
+	right:140px;
+	top:5px;
+	width:20px;
+	height:20px;
+	background:url(../images/refresh.png) no-repeat;
+	background-size:contain;
+	cursor:pointer;
+	opacity:0.8;
+}
+#transparentBtn{
+	position:absolute;
+	right:55px;
+	top:5px;
+	width:20px;
+	height:20px;
+	background:url(../images/glass_ball.png) no-repeat;
+	background-size:contain;
+	cursor:pointer;
+	opacity:0.8;
+}
+.gsfi{
+	left: 0px;
+	padding:0 5px;
+	margin:0;
+	outline: none;
+	background: rgba(255,255,255,0.8) url(data:image/gif;base64,R0lGODlhAQABAID/AMDAwAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw%3D%3D);
+	position: absolute;
+	left:10px;
+	right:10px;
+	top:30px;
+	height:30px;
+	font-size:14px;
+	line-height:30px;
+	border:1px solid #999;
+	z-index: 6;
+	color: rgb(0, 0, 0);	
+}
+#page{
+	position:absolute;
+	left:10px;
+	top:70px;
+	border:1px solid rgba(255,255,255,0.3);
+	width:812px;
+	height:548px;
+}
+#title{
+	color:#000;
+	text-indent:10px;
+	margin-top:5px;
+	font-weight:bold;
+	font-size:14px;
+	font-family:»ªÎÄÏ¸ºÚ;
+	text-shadow:#fff 1px 0 1px,#fff 2px 0 1px,#fff 3px 0 1px,#fff 1px 0 15px,#fff 2px 0 15px,#fff 3px 0 15px,#fff 0 0 15px,#fff 0 0 15px,#fff 0 0 15px,#fff 0 0 15px,#fff 0 0 15px,#fff 0 0 15px,#fff 0 0 15px,#fff 0 0 15px,#fff 0 0 15px;
+}
+#progress_bar{
+	width:188px;
+	height:11px;
+	background:url(../images/progress_bar.png);
+	margin:10px;
+	position:relative;
+}
+#progress{
+	width:0;
+	height:8px;
+	margin:1px 0 0 1px;
+	float:left;
+	background:url(../images/progress.png);
+}
+#progressAni{
+	position:absolute;
+	left:5px;
+	top:1px;
+	width:50px;
+	height:8px;
+	background:url(../images/progress.png) center;
+}

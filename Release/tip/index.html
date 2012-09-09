@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>tip</title>
+<style>
+html,body{
+	margin:0;
+	padding:0;
+}
+.popup{
+	padding: 8px 8px 8px 14px;
+	color: #C09853;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+	background-color: #FCF8E3;
+	border: 1px solid #FBEED5;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	display:inline-block;
+}
+</style>
+</head>
+
+<body>
+<div id="tip" class="popup">hehe</div>
+<script>
+function getArg(sArgName)
+{
+   var sHref = decodeURI(window.document.location.href);
+   var args   = sHref.split("?");
+   var retval = "";
+
+   if(args[0] == sHref) /* 参数为空 */
+   {
+      return retval;
+      /* 无需做任何处理 */
+   }
+   var str = args[1];
+   args = str.split("&");
+   for(var i = 0; i < args.length; i ++ )
+   {
+      str = args[i];
+      var arg = str.split("=");
+      if(arg.length <= 1) continue;
+      if(arg[0] == sArgName) retval = arg[1];
+   }
+   return retval;
+}
+var id;
+function init(){
+	//id=setTimeout('webtop.close()',1500);
+	tip.innerHTML=o.text;
+	webtop.move(o.x,o.y+15);
+	webtop.setSize(tip.clientWidth+20,tip.offsetHeight+20);
+	addEventListener("webtopShowTip",tipHandler);
+}
+document.onmouseover=function(){
+	//clearInterval(id);
+}
+document.onmouseout=function(){
+	//id=setTimeout('webtop.close()',1500);
+}
+var tipHandler=function(e){
+	var o=e.detail;
+	tip.innerHTML=o.text;
+	webtop.move(o.x-20,o.y+15);
+	webtop.setSize(tip.clientWidth+20,tip.offsetHeight+20);
+}
+var param,o;
+if(param=getArg('param')){
+	o=JSON.parse(param);
+}
+addEventListener("webtopReady",init);
+</script>
+</body>
+</html>
