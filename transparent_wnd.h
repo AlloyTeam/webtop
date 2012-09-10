@@ -8,7 +8,6 @@
 #include "cefclient/resource.h"
 #include <shellapi.h>
 #include <fstream>
-#include "LocalConnection.h"
 #include "SFMMem.h"
 #include "AmfStream.h"
 #include "P2P.h"
