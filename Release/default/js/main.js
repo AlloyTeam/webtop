@@ -3,7 +3,7 @@ closeBtn.onclick=function(){
 	webtop.close()
 }
 demo1.onclick=function(){
-	webtop.runApp("../browser/index.app",'http://www.alloyteam.com');
+	webtop.runAppEx("../browser/index.app",'http://www.alloyteam.com');
 }
 demo2.onclick=function(){
 	webtop.runAppEx("../demo/music/index.app");

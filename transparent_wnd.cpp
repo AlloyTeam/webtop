@@ -776,6 +776,7 @@ void TransparentWnd::DeleteStream(AmfStream* pStream){
 	delete pStream;
 }
 void TransparentWnd::ShowTip(CefString& text){
+	return;
 	TransparentWnd* pWin;
 	if(!pTipWin){
 		if(text.length()){
