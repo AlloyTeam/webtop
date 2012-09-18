@@ -404,6 +404,7 @@
     <ClCompile Include="myutil.cpp" />
     <ClCompile Include="my_handler.cpp" />
     <ClCompile Include="P2P.cpp" />
+    <ClCompile Include="res_scheme.cpp" />
     <ClCompile Include="SFMMem.cpp" />
     <ClCompile Include="system.cpp" />
     <ClCompile Include="transparent_wnd.cpp" />
