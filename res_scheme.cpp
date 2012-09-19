@@ -2,7 +2,7 @@
 // reserved. Use of this source code is governed by a BSD-style license that
 // can be found in the LICENSE file.
 
-#include "cefclient/scheme_test.h"
+#include "res_scheme.h"
 #include <algorithm>
 #include <string>
 #include "include/cef_browser.h"
@@ -40,7 +40,7 @@ class ResSchemeHandler : public CefSchemeHandler {
               "This contents of this page page are served by the "
               "ClientSchemeHandler class handling the client:// protocol."
               "<br/>You should see an image:"
-              "<br/><img src=\"client://tests/client.png\"><pre>";
+              "<br/><img src=\"res://webtop/client.png\"><pre>";
 
       // Output a string representation of the request
       std::string dump;

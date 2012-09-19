@@ -375,6 +375,7 @@
     <ClInclude Include="my_handler.h" />
     <ClInclude Include="P2P.h" />
     <ClInclude Include="proto.h" />
+    <ClInclude Include="res_scheme.h" />
     <ClInclude Include="SFMMem.h" />
     <ClInclude Include="system.h" />
     <ClInclude Include="transparent_wnd.h" />

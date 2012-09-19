@@ -22,7 +22,6 @@
 #include "osrplugin_test.h"
 #include "plugin_test.h"
 #include "resource.h"
-#include "scheme_test.h"
 #include "string_util.h"
 #include "uiplugin_test.h"
 #include "transparent_wnd.h"
@@ -33,6 +32,7 @@
 #include <fstream>
 #include <tchar.h>
 #include "../system.h"
+#include "res_scheme.h"
 
 #define MAX_LOADSTRING 100
 #define MAX_URL_LENGTH  255
