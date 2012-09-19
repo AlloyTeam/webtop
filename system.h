@@ -8,7 +8,8 @@
 #include <GdiPlus.h>
 using namespace Gdiplus;
 using namespace std;
-wstring GetExt(wstring path);
+wstring GetExtW(wstring path);
+string GetExt(string path);
 BOOL EnableShutdownPrivilege();
 BOOL Shutdown(BOOL bForce);
 BOOL Logoff(BOOL bForce);

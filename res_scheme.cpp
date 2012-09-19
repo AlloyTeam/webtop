@@ -13,6 +13,7 @@
 #include "cefclient/resource_util.h"
 #include "cefclient/string_util.h"
 #include "cefclient/util.h"
+#include "system.h"
 
 #if defined(OS_WIN)
 #include "cefclient/resource.h"
@@ -28,57 +29,56 @@ class ResSchemeHandler : public CefSchemeHandler {
                               CefRefPtr<CefSchemeHandlerCallback> callback)
                               OVERRIDE {
     REQUIRE_IO_THREAD();
+	extern HINSTANCE hInst;
 
     bool handled = false;
 
     AutoLock lock_scope(this);
 
     std::string url = request->GetURL();
-    if (strstr(url.c_str(), "handler.html") != NULL) {
-      // Build the response html
-      data_ = "<html><head><title>Client Scheme Handler</title></head><body>"
-              "This contents of this page page are served by the "
-              "ClientSchemeHandler class handling the client:// protocol."
-              "<br/>You should see an image:"
-              "<br/><img src=\"res://webtop/client.png\"><pre>";
-
-      // Output a string representation of the request
-      std::string dump;
-      DumpRequestContents(request, dump);
-      data_.append(dump);
-
-      data_.append("</pre><br/>Try the test form:"
-                   "<form method=\"POST\" action=\"handler.html\">"
-                   "<input type=\"text\" name=\"field1\">"
-                   "<input type=\"text\" name=\"field2\">"
-                   "<input type=\"submit\">"
-                   "</form></body></html>");
-
-      handled = true;
-
-      // Set the resulting mime type
-      mime_type_ = "text/html";
-    } else if (strstr(url.c_str(), "client.png") != NULL) {
+	std::string res=url.substr(6);
+	std::string modulePath="";
+	string name="";
+	int index=res.find_last_of("/");
+	HMODULE hModule=hInst;
+	if(index!=-1&&index!=(int)res.length()-1){
+		modulePath=res.substr(0,index);
+		name=res.substr(index+1);
+		hModule=GetModuleHandle(CefString(modulePath).ToWString().data());
+	}
+	else{
+		name=res.substr(0,index);
+	}
+	std::string ext=GetExt(name);
       // Load the response image
 #if defined(OS_WIN)
-      DWORD dwSize;
-      LPBYTE pBytes;
-      if (LoadBinaryResource(IDS_LOGO, dwSize, pBytes)) {
-        data_ = std::string(reinterpret_cast<const char*>(pBytes), dwSize);
-        handled = true;
-        // Set the resulting mime type
-        mime_type_ = "image/jpg";
-      }
+    DWORD dwSize;
+    LPBYTE pBytes;
+	if (LoadBinaryResourceByName(CefString(name).ToWString().data(), dwSize, pBytes, hModule)) {
+		data_ = std::string(reinterpret_cast<const char*>(pBytes), dwSize);
+		handled = true;
+		// Set the resulting mime type
+		if(ext=="html"||ext=="js"||ext=="css"){
+			if(ext=="js"){
+				mime_type_ = "text/javascript";
+			}
+			else{
+				mime_type_ = "text/"+ext;
+			}
+		}
+		else{
+			mime_type_ = "image/"+ext;
+		}
+    }
 #elif defined(OS_MACOSX) || defined(OS_LINUX)
-      if (LoadBinaryResource("logo.png", data_)) {
-        handled = true;
-        // Set the resulting mime type
-        mime_type_ = "image/png";
-      }
+    if (LoadBinaryResource("logo.png", data_)) {
+    handled = true;
+    // Set the resulting mime type
+    mime_type_ = "image/png";
+    }
 #else
 #error "Unsupported platform"
 #endif
-    }
 
     if (handled) {
       // Indicate the headers are available.
@@ -159,10 +159,10 @@ class ResSchemeHandlerFactory : public CefSchemeHandlerFactory {
 
 void InitResScheme() {
   CefRegisterCustomScheme("res", true, false, false);
-  CefRegisterSchemeHandlerFactory("res", "webtop",
+  CefRegisterSchemeHandlerFactory("res", "",
       new ResSchemeHandlerFactory());
 }
 
 void RunResScheme(CefRefPtr<CefBrowser> browser) {
-  browser->GetMainFrame()->LoadURL("res://webtop/handler.html");
+  browser->GetMainFrame()->LoadURL("res://webtop/logo.png");
 }

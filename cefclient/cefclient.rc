@@ -15,30 +15,28 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// English (U.S.) resources
+// 英语(美国) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
-#ifdef _WIN32
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 #pragma code_page(1252)
-#endif //_WIN32
 
 /////////////////////////////////////////////////////////////////////////////
 //
-// Binary
+// 256
 //
 
-IDS_LOGO BINARY "res\\logo.png"
-IDS_UIPLUGIN BINARY "res\\uiplugin.html"
-IDS_OSRPLUGIN BINARY "res\\osrplugin.html"
-IDS_LOGOBALL BINARY "res\\logoball.png"
-IDS_LOCALSTORAGE BINARY "res\\localstorage.html"
-IDS_XMLHTTPREQUEST BINARY "res\\xmlhttprequest.html"
-IDS_DOMACCESS BINARY "res\\domaccess.html"
-IDS_MODALMAIN BINARY "res\\modalmain.html"
-IDS_MODALDIALOG BINARY "res\\modaldialog.html"
-IDS_EXTENSIONPERF BINARY "res\\extensionperf.html"
-IDS_TRANSPARENCY BINARY "res\\transparency.html"
+LOGO.PNG                256                     "res\\logo.png"
+IDS_UIPLUGIN            256                     "res\\uiplugin.html"
+IDS_OSRPLUGIN           256                     "res\\osrplugin.html"
+IDS_LOGOBALL            256                     "res\\logoball.png"
+IDS_LOCALSTORAGE        256                     "res\\localstorage.html"
+IDS_XMLHTTPREQUEST      256                     "res\\xmlhttprequest.html"
+IDS_DOMACCESS           256                     "res\\domaccess.html"
+IDS_MODALMAIN           256                     "res\\modalmain.html"
+IDS_MODALDIALOG         256                     "res\\modaldialog.html"
+IDS_EXTENSIONPERF       256                     "res\\extensionperf.html"
+IDS_TRANSPARENCY        256                     "res\\transparency.html"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -47,15 +45,15 @@ IDS_TRANSPARENCY BINARY "res\\transparency.html"
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDI_CEFCLIENT           ICON                    "res\cefclient.ico"
-IDI_SMALL               ICON                    "res\small.ico"
+IDI_CEFCLIENT           ICON                    "res\\cefclient.ico"
+IDI_SMALL               ICON                    "res\\small.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // Menu
 //
 
-IDC_CEFCLIENT MENU 
+IDC_CEFCLIENT MENU
 BEGIN
     POPUP "&File"
     BEGIN
@@ -74,8 +72,8 @@ BEGIN
         MENUITEM "Get Source",                  ID_TESTS_GETSOURCE
         MENUITEM "Get Text",                    ID_TESTS_GETTEXT
         MENUITEM "JavaScript Binding Handler",  ID_TESTS_JAVASCRIPT_BINDING
-        MENUITEM "JavaScript Extension Handler",ID_TESTS_JAVASCRIPT_EXTENSION
-        MENUITEM "JavaScript Extension Performance",ID_TESTS_JAVASCRIPT_PERFORMANCE
+        MENUITEM "JavaScript Extension Handler", ID_TESTS_JAVASCRIPT_EXTENSION
+        MENUITEM "JavaScript Extension Performance", ID_TESTS_JAVASCRIPT_PERFORMANCE
         MENUITEM "JavaScript Execute",          ID_TESTS_JAVASCRIPT_EXECUTE
         MENUITEM "JavaScript Invoke",           ID_TESTS_JAVASCRIPT_INVOKE
         MENUITEM "Plugin",                      ID_TESTS_PLUGIN
@@ -85,8 +83,8 @@ BEGIN
         MENUITEM "Request",                     ID_TESTS_REQUEST
         MENUITEM "Scheme Handler",              ID_TESTS_SCHEME_HANDLER
         MENUITEM "UI App Example",              ID_TESTS_UIAPP
-        MENUITEM "Off-Screen Rendering Example",ID_TESTS_OSRAPP
-        MENUITEM "Transparent Off-Screen Rendering Example",ID_TESTS_TRANSPARENT_OSRAPP
+        MENUITEM "Off-Screen Rendering Example", ID_TESTS_OSRAPP
+        MENUITEM "Transparent Off-Screen Rendering Example", ID_TESTS_TRANSPARENT_OSRAPP
         MENUITEM "Local Storage",               ID_TESTS_LOCALSTORAGE
         MENUITEM "XMLHttpRequest",              ID_TESTS_XMLHTTPREQUEST
         MENUITEM "WebURLRequest",               ID_TESTS_WEBURLREQUEST
@@ -103,7 +101,7 @@ BEGIN
         MENUITEM "Close Developer Tools",       ID_TESTS_DEVTOOLS_CLOSE
         MENUITEM "Modal Dialog",                ID_TESTS_MODALDIALOG
         MENUITEM "Get Image",                   ID_TESTS_GETIMAGE
-   END
+    END
 END
 
 
@@ -112,7 +110,7 @@ END
 // Accelerator
 //
 
-IDC_CEFCLIENT ACCELERATORS 
+IDC_CEFCLIENT ACCELERATORS
 BEGIN
     "?",            IDM_ABOUT,              ASCII,  ALT
     "/",            IDM_ABOUT,              ASCII,  ALT
@@ -124,7 +122,7 @@ END
 // Dialog
 //
 
-IDD_ABOUTBOX DIALOG  22, 17, 230, 75
+IDD_ABOUTBOX DIALOG 22, 17, 230, 75
 STYLE DS_SETFONT | DS_MODALFRAME | WS_CAPTION | WS_SYSMENU
 CAPTION "About"
 FONT 8, "System"
@@ -169,13 +167,13 @@ END
 // String Table
 //
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     IDS_APP_TITLE           "cefclient"
     IDC_CEFCLIENT           "CEFCLIENT"
 END
 
-#endif    // English (U.S.) resources
+#endif    // 英语(美国) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

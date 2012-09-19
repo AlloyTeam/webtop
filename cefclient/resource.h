@@ -1,12 +1,7 @@
-// Copyright (c) 2010 The Chromium Embedded Framework Authors. All rights
-// reserved. Use of this source code is governed by a BSD-style license that
-// can be found in the LICENSE file.
-
 //{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ generated include file.
 // Used by cefclient.rc
 //
-#define BINARY                          256
 #define IDC_MYICON                      2
 #define IDD_CEFCLIENT_DIALOG            102
 #define IDS_APP_TITLE                   103
@@ -21,6 +16,18 @@
 #define IDC_NAV_FORWARD                 201
 #define IDC_NAV_RELOAD                  202
 #define IDC_NAV_STOP                    203
+#define BINARY                          256
+#define IDS_LOGO                        1000
+#define IDS_UIPLUGIN                    1001
+#define IDS_LOGOBALL                    1002
+#define IDS_LOCALSTORAGE                1003
+#define IDS_XMLHTTPREQUEST              1004
+#define IDS_DOMACCESS                   1005
+#define IDS_OSRPLUGIN                   1006
+#define IDS_MODALMAIN                   1007
+#define IDS_MODALDIALOG                 1008
+#define IDS_EXTENSIONPERF               1009
+#define IDS_TRANSPARENCY                1010
 #define ID_WARN_CONSOLEMESSAGE          32000
 #define ID_WARN_DOWNLOADCOMPLETE        32001
 #define ID_WARN_DOWNLOADERROR           32002
@@ -59,20 +66,6 @@
 #define ID_TESTS_GETIMAGE               32799
 #define ID_TESTS_PLUGIN_INFO            32800
 #define IDC_STATIC                      -1
-#define IDS_LOGO                        1000
-#define IDS_UIPLUGIN                    1001
-#define IDS_LOGOBALL                    1002
-#define IDS_LOCALSTORAGE                1003
-#define IDS_XMLHTTPREQUEST              1004
-#define IDS_DOMACCESS                   1005
-#define IDS_OSRPLUGIN                   1006
-#define IDS_MODALMAIN                   1007
-#define IDS_MODALDIALOG                 1008
-#define IDS_EXTENSIONPERF               1009
-#define IDS_TRANSPARENCY                1010
-
-// Avoid files associated with MacOS
-#define _X86_
 
 // Next default values for new objects
 // 

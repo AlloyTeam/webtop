@@ -48,7 +48,7 @@ bool MyHandler::OnKeyEvent(CefRefPtr<CefBrowser> browser,
   REQUIRE_UI_THREAD();
   if(!win)return false;
 	TransparentWnd* winHandler=(TransparentWnd*)win;
-  if (code == 123 || code==120) {
+  if ((code == 123 || code==120)&&type == KEYEVENT_RAWKEYDOWN) {
     // Special handling for the space character if a form element does not have
     // focus.
     if (type == KEYEVENT_RAWKEYDOWN&&winHandler->enableDevelop) {
@@ -60,8 +60,8 @@ bool MyHandler::OnKeyEvent(CefRefPtr<CefBrowser> browser,
 		winHandler->ExecJS(s);
 	}
   }
-  if(code == 116){
-	  if (type == KEYEVENT_RAWKEYDOWN&&winHandler->enableRefresh) {
+  if(code == 116&&type == KEYEVENT_RAWKEYDOWN){
+	if(winHandler->enableRefresh) {
 		winHandler->ReloadIgnoreCache();
 		return true;
 	}

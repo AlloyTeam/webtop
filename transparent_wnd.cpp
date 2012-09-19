@@ -615,7 +615,7 @@ void TransparentWnd::SaveImageFromStream(CefString path,AmfStream* pStream,int w
 	}
 	bm.UnlockBits(&bmData);
 	CLSID tiffClsid;
-	wstring type=wstring(L"image/")+GetExt(path.ToWString());
+	wstring type=wstring(L"image/")+GetExtW(path.ToWString());
 	GetEncoderClsid(type.data(), &tiffClsid);
 	bm.Save(TranslatePath(path).ToWString().data(), &tiffClsid);
 }
@@ -1035,7 +1035,7 @@ void TransparentWnd::ToImage(CefString path){
 	delete []p1;
 	bm.UnlockBits(&bmData);
 	CLSID tiffClsid;
-	GetEncoderClsid((L"image/"+GetExt(path.ToWString())).data(), &tiffClsid);
+	GetEncoderClsid((L"image/"+GetExtW(path.ToWString())).data(), &tiffClsid);
 	bm.Save(TranslatePath(path).ToWString().data(), &tiffClsid);
 }
 
@@ -1065,7 +1065,7 @@ void TransparentWnd::ToImageEx(CefString path, int _x, int _y, int _width, int _
 	delete []p1;
 	bm.UnlockBits(&bmData);
 	CLSID tiffClsid;
-	GetEncoderClsid((L"image/"+GetExt(path.ToWString())).data(), &tiffClsid);
+	GetEncoderClsid((L"image/"+GetExtW(path.ToWString())).data(), &tiffClsid);
 	bm.Save(TranslatePath(path).ToWString().data(), &tiffClsid);
 }
 

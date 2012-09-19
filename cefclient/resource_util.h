@@ -15,7 +15,8 @@ class CefStreamReader;
 #include "cefclient/resource.h"
 
 // Load a resource of type BINARY
-bool LoadBinaryResource(int binaryId, DWORD &dwSize, LPBYTE &pBytes);
+bool LoadBinaryResourceByName(LPCWSTR name, DWORD &dwSize, LPBYTE &pBytes, HMODULE hModule=NULL);
+bool LoadBinaryResource(int binaryId, DWORD &dwSize, LPBYTE &pBytes, HMODULE hModule=NULL);
 CefRefPtr<CefStreamReader> GetBinaryResourceReader(int binaryId);
 
 #elif defined(OS_MACOSX) || defined(OS_POSIX)

@@ -5,7 +5,7 @@
 #include <ShlObj.h>
 #include "base64.h"
 
-wstring GetExt(wstring path){
+wstring GetExtW(wstring path){
 	int index=path.find_last_of('.');
 	if(index==-1){
 		return L"";
@@ -13,6 +13,17 @@ wstring GetExt(wstring path){
 	else{
 		wstring type=path.substr(index+1);
 		return replace_allW(type,L"jpg",L"jpeg");
+	}
+}
+
+string GetExt(string path){
+	int index=path.find_last_of('.');
+	if(index==-1){
+		return "";
+	}
+	else{
+		string type=path.substr(index+1);
+		return replace_all(type,"jpg","jpeg");
 	}
 }
 
@@ -454,6 +465,6 @@ int   GetEncoderClsid(const   WCHAR*   format,   CLSID*   pClsid)
 } 
 void SaveBitmap(Bitmap* pbm, wstring path){
 	CLSID tiffClsid;
-	GetEncoderClsid((L"image/"+ GetExt(path)).data(), &tiffClsid);
+	GetEncoderClsid((L"image/"+ GetExtW(path)).data(), &tiffClsid);
 	pbm->Save(path.data(), &tiffClsid);
 }

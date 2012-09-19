@@ -202,6 +202,7 @@ addEventListener("webtopWindowActive",activeHandler);
 addEventListener("webtopWindowFocus",focusHandler);
 addEventListener("webtopRefresh",refreshHandler);
 addEventListener("webtopShowDev",showDevHandler);
+addEventListener("webtopWindowClose",closeHandler);
 refreshBtn.onclick=function(){
 	refreshHandler()
 }

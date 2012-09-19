@@ -8,14 +8,31 @@
 
 #if defined(OS_WIN)
 
-bool LoadBinaryResource(int binaryId, DWORD &dwSize, LPBYTE &pBytes) {
-  extern HINSTANCE hInst;
-  HRSRC hRes = FindResource(hInst, MAKEINTRESOURCE(binaryId),
+bool LoadBinaryResourceByName(LPCWSTR name, DWORD &dwSize, LPBYTE &pBytes, HMODULE hModule) {
+  //extern HINSTANCE hInst;
+  HRSRC hRes = FindResource(hModule, name,
                             MAKEINTRESOURCE(256));
   if (hRes) {
-    HGLOBAL hGlob = LoadResource(hInst, hRes);
+    HGLOBAL hGlob = LoadResource(hModule, hRes);
     if (hGlob) {
-      dwSize = SizeofResource(hInst, hRes);
+      dwSize = SizeofResource(hModule, hRes);
+      pBytes = (LPBYTE)LockResource(hGlob);
+      if (dwSize > 0 && pBytes)
+        return true;
+    }
+  }
+
+  return false;
+}
+
+bool LoadBinaryResource(int binaryId, DWORD &dwSize, LPBYTE &pBytes, HMODULE hModule) {
+  extern HINSTANCE hInst;
+  HRSRC hRes = FindResource(hModule, MAKEINTRESOURCE(binaryId),
+                            MAKEINTRESOURCE(256));
+  if (hRes) {
+    HGLOBAL hGlob = LoadResource(hModule, hRes);
+    if (hGlob) {
+      dwSize = SizeofResource(hModule, hRes);
       pBytes = (LPBYTE)LockResource(hGlob);
       if (dwSize > 0 && pBytes)
         return true;
