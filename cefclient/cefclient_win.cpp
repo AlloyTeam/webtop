@@ -110,7 +110,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 	InitExtensionTest();
 	InitCallback();
 	// Register the scheme handler.
-	//InitSchemeTest();
+	InitResScheme();
 
 	HACCEL hAccelTable;
 
