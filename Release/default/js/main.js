@@ -15,7 +15,7 @@ demo4.onclick=function(){
 	webtop.runAppEx("app/codetank.app");
 }
 demo5.onclick=function(){
-	webtop.runApp("app/fighter.app");
+	webtop.runAppEx("app/fighter.app");
 }
 var readyHandler=function(){
 	var size=webtop.getScreenSize();
