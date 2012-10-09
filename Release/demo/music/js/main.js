@@ -428,7 +428,7 @@ time.onclick=function(){
 var readyHandler=function(){
 	webtop.move(100,100);
 	webtop.setSize(270,80);
-	setTimeout('webtop.toImage("screen.png")',0);
+	setTimeout('webtop.toImage("screen.png")',2000);
 }
 addEventListener("webtopReady",readyHandler);
 closeBtn.onclick=function(){

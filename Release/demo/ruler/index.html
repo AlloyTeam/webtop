@@ -240,7 +240,7 @@ document.onselectstart=function(){
 createN();
 var readyHandler=function(){
 	webtop.setTopMost();
-	setTimeout('webtop.toImage("screen.png")',0);
+	setTimeout('webtop.toImageEx("screen.png",3,453,1001,100)',0);
 }
 addEventListener("webtopReady",readyHandler);
 var rotating=false;

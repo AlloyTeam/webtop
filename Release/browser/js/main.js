@@ -173,9 +173,12 @@ var readyHandler=function(){
 	webtop.max();
 	setTimeout("webtop.toImage('screen.png');",1000);
 	var href=location.href;
-	var param=href.substr(href.indexOf('=')+1);//getArg('param');
-	if(param){
-		webtop.loadUrlIn(param)
+	var index=href.indexOf('=');
+	if(index!=-1){
+		var param=href.substr(index+1);//getArg('param');
+		if(param){
+			webtop.loadUrlIn(param)
+		}
 	}
 	/*else{
 		newPage('http://www.alloyteam.com');
