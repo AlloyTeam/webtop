@@ -420,8 +420,7 @@ LRESULT CALLBACK TransparentWnd::TransparentWndProc(HWND hWnd, UINT message, WPA
 			handler=(TransparentWnd*)GetWindowLong(hWnd, GWL_USERDATA);
 			CefRefPtr<ClientHandler> g_handler=handler->g_handler;
 			browser = g_handler->GetBrowser();
-			browser->SendMouseWheelEvent(LOWORD(lParam)-handler->x, HIWORD(lParam)-handler->y,
-			GET_WHEEL_DELTA_WPARAM(wParam), 0);
+			browser->SendMouseWheelEvent(LOWORD(lParam)-handler->x, HIWORD(lParam)-handler->y, GET_WHEEL_DELTA_WPARAM(wParam), GET_WHEEL_DELTA_WPARAM(wParam));
 		}
 		break;
 

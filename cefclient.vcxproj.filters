@@ -3,26 +3,11 @@
   <ItemGroup>
     <ClCompile Include="AmfStream.cpp" />
     <ClCompile Include="base64.cpp" />
-    <ClCompile Include="cefclient\uiplugin_test.cpp" />
-    <ClCompile Include="cefclient\extension_test.cpp" />
-    <ClCompile Include="cefclient\clientplugin.cpp" />
-    <ClCompile Include="cefclient\client_handler.cpp" />
     <ClCompile Include="cefclient\string_util.cpp" />
-    <ClCompile Include="cefclient\uiplugin.cpp" />
-    <ClCompile Include="cefclient\download_handler.cpp" />
-    <ClCompile Include="cefclient\osrplugin.cpp" />
-    <ClCompile Include="cefclient\scheme_test.cpp" />
-    <ClCompile Include="cefclient\resource_util_win.cpp" />
-    <ClCompile Include="cefclient\client_handler_win.cpp" />
-    <ClCompile Include="cefclient\osrplugin_test.cpp" />
-    <ClCompile Include="cefclient\plugin_test.cpp" />
-    <ClCompile Include="cefclient\binding_test.cpp" />
-    <ClCompile Include="cefclient\client_popup_handler.cpp" />
     <ClCompile Include="CodeConvertor.cpp" />
     <ClCompile Include="myutil.cpp" />
     <ClCompile Include="my_handler.cpp" />
     <ClCompile Include="P2P.cpp" />
-    <ClCompile Include="res_scheme.cpp" />
     <ClCompile Include="SFMMem.cpp" />
     <ClCompile Include="system.cpp" />
     <ClCompile Include="transparent_wnd.cpp" />
@@ -35,36 +20,59 @@
     <ClCompile Include="cefclient\cefclient_switches.cpp">
       <Filter>cef</Filter>
     </ClCompile>
+    <ClCompile Include="cefclient\binding_test.cpp">
+      <Filter>cefclient</Filter>
+    </ClCompile>
+    <ClCompile Include="cefclient\client_handler.cpp">
+      <Filter>cefclient</Filter>
+    </ClCompile>
+    <ClCompile Include="cefclient\client_handler_win.cpp">
+      <Filter>cefclient</Filter>
+    </ClCompile>
+    <ClCompile Include="cefclient\client_popup_handler.cpp">
+      <Filter>cefclient</Filter>
+    </ClCompile>
+    <ClCompile Include="cefclient\clientplugin.cpp">
+      <Filter>cefclient</Filter>
+    </ClCompile>
+    <ClCompile Include="cefclient\download_handler.cpp">
+      <Filter>cefclient</Filter>
+    </ClCompile>
+    <ClCompile Include="cefclient\extension_test.cpp">
+      <Filter>cefclient</Filter>
+    </ClCompile>
+    <ClCompile Include="cefclient\osrplugin.cpp">
+      <Filter>cefclient</Filter>
+    </ClCompile>
+    <ClCompile Include="cefclient\plugin_test.cpp">
+      <Filter>cefclient</Filter>
+    </ClCompile>
+    <ClCompile Include="cefclient\osrplugin_test.cpp">
+      <Filter>cefclient</Filter>
+    </ClCompile>
+    <ClCompile Include="res_scheme.cpp">
+      <Filter>cefclient</Filter>
+    </ClCompile>
+    <ClCompile Include="cefclient\resource_util_win.cpp">
+      <Filter>cefclient</Filter>
+    </ClCompile>
+    <ClCompile Include="cefclient\scheme_test.cpp">
+      <Filter>cefclient</Filter>
+    </ClCompile>
+    <ClCompile Include="cefclient\uiplugin_test.cpp">
+      <Filter>cefclient</Filter>
+    </ClCompile>
+    <ClCompile Include="cefclient\uiplugin.cpp">
+      <Filter>cefclient</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AmfStream.h" />
     <ClInclude Include="base64.h" />
     <ClInclude Include="CodeConvertor.h" />
-    <ClInclude Include="include\internal\npapi\basictypes.h" />
-    <ClInclude Include="include\internal\npapi\build_config.h" />
-    <ClInclude Include="include\internal\npapi\npapi.h" />
-    <ClInclude Include="include\internal\npapi\npapi_extensions.h" />
-    <ClInclude Include="include\internal\npapi\npfunctions.h" />
-    <ClInclude Include="include\internal\npapi\nphostapi.h" />
-    <ClInclude Include="include\internal\npapi\npruntime.h" />
-    <ClInclude Include="include\internal\npapi\nptypes.h" />
     <ClInclude Include="include\internal\npapi\port.h" />
-    <ClInclude Include="cefclient\binding_test.h" />
-    <ClInclude Include="cefclient\uiplugin.h" />
-    <ClInclude Include="cefclient\Resource.h" />
-    <ClInclude Include="cefclient\extension_test.h" />
     <ClInclude Include="cefclient\string_util.h" />
-    <ClInclude Include="cefclient\client_handler.h" />
-    <ClInclude Include="cefclient\clientplugin.h" />
-    <ClInclude Include="cefclient\osrplugin_test.h" />
-    <ClInclude Include="cefclient\uiplugin_test.h" />
-    <ClInclude Include="cefclient\download_handler.h" />
-    <ClInclude Include="cefclient\scheme_test.h" />
-    <ClInclude Include="cefclient\osrplugin.h" />
-    <ClInclude Include="cefclient\client_popup_handler.h" />
-    <ClInclude Include="cefclient\plugin_test.h" />
     <ClInclude Include="cefclient\util.h" />
-    <ClInclude Include="cefclient\resource_util.h" />
     <ClInclude Include="myutil.h" />
     <ClInclude Include="my_handler.h" />
     <ClInclude Include="P2P.h" />
@@ -264,32 +272,129 @@
     <ClInclude Include="cefclient\cefclient_switches.h">
       <Filter>cef</Filter>
     </ClInclude>
-    <ClInclude Include="res_scheme.h" />
+    <ClInclude Include="cefclient\clientplugin.h">
+      <Filter>cefclient</Filter>
+    </ClInclude>
+    <ClInclude Include="cefclient\binding_test.h">
+      <Filter>cefclient</Filter>
+    </ClInclude>
+    <ClInclude Include="include\internal\npapi\build_config.h">
+      <Filter>cefclient</Filter>
+    </ClInclude>
+    <ClInclude Include="cefclient\client_handler.h">
+      <Filter>cefclient</Filter>
+    </ClInclude>
+    <ClInclude Include="cefclient\client_popup_handler.h">
+      <Filter>cefclient</Filter>
+    </ClInclude>
+    <ClInclude Include="include\internal\npapi\basictypes.h">
+      <Filter>cefclient</Filter>
+    </ClInclude>
+    <ClInclude Include="cefclient\download_handler.h">
+      <Filter>cefclient</Filter>
+    </ClInclude>
+    <ClInclude Include="cefclient\extension_test.h">
+      <Filter>cefclient</Filter>
+    </ClInclude>
+    <ClInclude Include="include\internal\npapi\npapi.h">
+      <Filter>cefclient</Filter>
+    </ClInclude>
+    <ClInclude Include="cefclient\osrplugin.h">
+      <Filter>cefclient</Filter>
+    </ClInclude>
+    <ClInclude Include="include\internal\npapi\npapi_extensions.h">
+      <Filter>cefclient</Filter>
+    </ClInclude>
+    <ClInclude Include="include\internal\npapi\npfunctions.h">
+      <Filter>cefclient</Filter>
+    </ClInclude>
+    <ClInclude Include="include\internal\npapi\nphostapi.h">
+      <Filter>cefclient</Filter>
+    </ClInclude>
+    <ClInclude Include="include\internal\npapi\npruntime.h">
+      <Filter>cefclient</Filter>
+    </ClInclude>
+    <ClInclude Include="include\internal\npapi\nptypes.h">
+      <Filter>cefclient</Filter>
+    </ClInclude>
+    <ClInclude Include="cefclient\plugin_test.h">
+      <Filter>cefclient</Filter>
+    </ClInclude>
+    <ClInclude Include="cefclient\osrplugin_test.h">
+      <Filter>cefclient</Filter>
+    </ClInclude>
+    <ClInclude Include="res_scheme.h">
+      <Filter>cefclient</Filter>
+    </ClInclude>
+    <ClInclude Include="cefclient\Resource.h">
+      <Filter>cefclient</Filter>
+    </ClInclude>
+    <ClInclude Include="cefclient\resource_util.h">
+      <Filter>cefclient</Filter>
+    </ClInclude>
+    <ClInclude Include="cefclient\scheme_test.h">
+      <Filter>cefclient</Filter>
+    </ClInclude>
+    <ClInclude Include="cefclient\uiplugin_test.h">
+      <Filter>cefclient</Filter>
+    </ClInclude>
+    <ClInclude Include="cefclient\uiplugin.h">
+      <Filter>cefclient</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="cefclient\res\extensionperf.html" />
-    <None Include="cefclient\res\osrplugin.html" />
-    <None Include="cefclient\res\xmlhttprequest.html" />
-    <None Include="cefclient\res\domaccess.html" />
-    <None Include="cefclient\res\transparency.html" />
-    <None Include="cefclient\res\modalmain.html" />
-    <None Include="cefclient\res\modaldialog.html" />
-    <None Include="cefclient\res\logoball.png" />
-    <None Include="cefclient\res\localstorage.html" />
-    <None Include="cefclient\res\small.ico" />
-    <None Include="cefclient\res\logo.png" />
-    <None Include="cefclient\res\uiplugin.html" />
-    <None Include="include\internal\npapi\README-TRANSFER.txt" />
     <None Include="cefclient.gyp">
       <Filter>cef</Filter>
     </None>
     <None Include="cefclient\res\cefclient.ico">
       <Filter>cef</Filter>
     </None>
+    <None Include="cefclient\res\domaccess.html">
+      <Filter>cefclient</Filter>
+    </None>
+    <None Include="cefclient\res\modalmain.html">
+      <Filter>cefclient</Filter>
+    </None>
+    <None Include="cefclient\res\extensionperf.html">
+      <Filter>cefclient</Filter>
+    </None>
+    <None Include="cefclient\res\localstorage.html">
+      <Filter>cefclient</Filter>
+    </None>
+    <None Include="cefclient\res\logo.png">
+      <Filter>cefclient</Filter>
+    </None>
+    <None Include="cefclient\res\logoball.png">
+      <Filter>cefclient</Filter>
+    </None>
+    <None Include="cefclient\res\modaldialog.html">
+      <Filter>cefclient</Filter>
+    </None>
+    <None Include="cefclient\res\osrplugin.html">
+      <Filter>cefclient</Filter>
+    </None>
+    <None Include="cefclient\res\transparency.html">
+      <Filter>cefclient</Filter>
+    </None>
+    <None Include="cefclient\res\uiplugin.html">
+      <Filter>cefclient</Filter>
+    </None>
+    <None Include="cefclient\res\xmlhttprequest.html">
+      <Filter>cefclient</Filter>
+    </None>
+    <None Include="include\internal\npapi\README-TRANSFER.txt">
+      <Filter>cefclient</Filter>
+    </None>
+    <None Include="cefclient\res\small.ico">
+      <Filter>cefclient</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="cef">
       <UniqueIdentifier>{93b0d772-681f-4459-ba2b-b8c2661e109c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cefclient">
+      <UniqueIdentifier>{0d58e5ed-c492-4484-bfc8-8c1b3dc56080}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
