@@ -15,15 +15,12 @@ html,body{
 }
 #wrapper{
 	width:850px;
-    min-height:500px;
 	padding:50px 10px 0 10px;
 	margin:5px auto;
     text-align:center;
 	position:relative;
 	height:585px;
-	background:url(../images/glass.png);
-	background-size:contain;
-	border:1px solid rgba(255,255,255,0.3);
+	background:url(../images/bg.png) repeat-x;
 	box-shadow: 0px 0px 5px 2px rgba(128, 128, 128, 0.5);
 	border-radius:5px;
 }

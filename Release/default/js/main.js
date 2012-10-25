@@ -1,4 +1,7 @@
 var version=20120909001;
+function $(id){
+	return document.getElementById(id);
+}
 closeBtn.onclick=function(){
 	webtop.close()
 }
@@ -79,3 +82,4 @@ function jsonp(url, callback) {
 	}
 }
 jsonp('http://download.alloyteam.com/webtop/ip.js?t='+Date.now());
+//var bg=new ImgBg('images/bg.png',870,635,$('wrapper'),10,10,10,10);
