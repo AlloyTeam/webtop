@@ -17,7 +17,11 @@ BOOL Reboot(BOOL bForce);
 BOOL  SaveFileDialog(HWND hWnd, const TCHAR* fileNameStr, TCHAR* szFile);
 BOOL  OpenFileDialog(HWND hWnd, const TCHAR* fileNameStr, TCHAR* szFile);
 int CDECL MessageBoxPrintf (TCHAR * szCaption, TCHAR * szFormat, ...);
-
+	BOOL ModifyStyle(
+		HWND hWnd,
+		_In_ DWORD dwRemove,
+		_In_ DWORD dwAdd,
+		_In_ UINT nFlags = 0);
 void SetDefaultBrowser(const TCHAR *strAppName);
 BOOL CheckFileRelation(const TCHAR *strExt, const TCHAR *strAppKey, TCHAR *strAppName, TCHAR *strDefaultIcon, TCHAR *strDescribe);
 void RegisterFileRelation(TCHAR *strExt, TCHAR *strAppName, TCHAR *strAppKey, TCHAR *strDefaultIcon, TCHAR *strDescribe);

@@ -188,6 +188,27 @@ wstring find(wstring path,bool cursive)
     FindClose(hFind);
 	return ss.str();
 }
+	BOOL ModifyStyle(HWND hWnd, 
+		_In_ DWORD dwRemove,
+		_In_ DWORD dwAdd,
+		_In_ UINT nFlags)
+	{
+
+		DWORD dwStyle = ::GetWindowLong(hWnd, GWL_STYLE);
+		DWORD dwNewStyle = (dwStyle & ~dwRemove) | dwAdd;
+		if(dwStyle == dwNewStyle)
+			return FALSE;
+
+		::SetWindowLong(hWnd, GWL_STYLE, dwNewStyle);
+		if(nFlags != 0)
+		{
+			::SetWindowPos(hWnd, NULL, 0, 0, 0, 0,
+				SWP_NOSIZE | SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE | nFlags);
+		}
+
+		return TRUE;
+	}
+
 
 void SetDefaultBrowser(const TCHAR *strAppName){
 	HKEY key;

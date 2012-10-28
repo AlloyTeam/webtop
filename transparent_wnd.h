@@ -112,12 +112,15 @@ public:
 	HBITMAP hBitMap;
 	bool enableRefresh;
 	bool enableDevelop;
+	bool isMini;
 	bool isHide;
 	void RecieveMessage(int type, char* message, char* ip, unsigned short port);
 	void ShowTip(CefString& text);
 	void *pTipWin;
 	static CSFMServer* pSever;
 	P2P p2p;
+	int restoreX;
+	int restoreY;
 	void GetUsers();
 };
 #endif
