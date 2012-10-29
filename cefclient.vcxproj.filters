@@ -11,12 +11,6 @@
     <ClCompile Include="SFMMem.cpp" />
     <ClCompile Include="system.cpp" />
     <ClCompile Include="transparent_wnd.cpp" />
-    <ClCompile Include="cefclient\cefclient.cpp">
-      <Filter>cef</Filter>
-    </ClCompile>
-    <ClCompile Include="cefclient\cefclient_win.cpp">
-      <Filter>cef</Filter>
-    </ClCompile>
     <ClCompile Include="cefclient\cefclient_switches.cpp">
       <Filter>cef</Filter>
     </ClCompile>
@@ -63,6 +57,12 @@
       <Filter>cefclient</Filter>
     </ClCompile>
     <ClCompile Include="cefclient\uiplugin.cpp">
+      <Filter>cefclient</Filter>
+    </ClCompile>
+    <ClCompile Include="cefclient\cefclient_win.cpp">
+      <Filter>cefclient</Filter>
+    </ClCompile>
+    <ClCompile Include="cefclient\cefclient.cpp">
       <Filter>cefclient</Filter>
     </ClCompile>
   </ItemGroup>
@@ -266,9 +266,6 @@
     <ClInclude Include="include\cef_zip_reader.h">
       <Filter>cef</Filter>
     </ClInclude>
-    <ClInclude Include="cefclient\cefclient.h">
-      <Filter>cef</Filter>
-    </ClInclude>
     <ClInclude Include="cefclient\cefclient_switches.h">
       <Filter>cef</Filter>
     </ClInclude>
@@ -339,6 +336,9 @@
       <Filter>cefclient</Filter>
     </ClInclude>
     <ClInclude Include="cefclient\uiplugin.h">
+      <Filter>cefclient</Filter>
+    </ClInclude>
+    <ClInclude Include="cefclient\cefclient.h">
       <Filter>cefclient</Filter>
     </ClInclude>
   </ItemGroup>

@@ -84,6 +84,7 @@ void TransparentWnd::EnableTransparent(UINT ex_style){
 	if(g_handler->GetBrowser()){
 		g_handler->GetBrowser()->GetMainFrame()->LoadURL(url);
 	}
+	ModifyStyle(renderWindow,0,WS_SYSMENU|WS_MINIMIZEBOX,0);
 }
 void TransparentWnd::CreateBrowserWindowBase(CefString path, UINT ex_style, bool isTransparent){
 	TCHAR   szPath[1000];   
@@ -431,6 +432,7 @@ LRESULT CALLBACK TransparentWnd::TransparentWndProc(HWND hWnd, UINT message, WPA
 			browser = g_handler->GetBrowser();
 			handler->FocusHandler();
 			browser->SendFocusEvent(message==WM_SETFOCUS);
+			//handler->isMini=false;
 			//GetCapture();
 		}
 		break;
@@ -442,6 +444,7 @@ LRESULT CALLBACK TransparentWnd::TransparentWndProc(HWND hWnd, UINT message, WPA
 			browser->SendFocusEvent(message==WM_SETFOCUS);
 			if (GetCapture() == hWnd)
 				ReleaseCapture();
+			//handler->isMini=true;
 		}
 		break;
 	case WM_CAPTURECHANGED:
@@ -825,6 +828,7 @@ TransparentWnd::TransparentWnd(void)
 	isEnableDrag=false;
 	m_buffer=NULL;
 	readyHandler="";
+	isMini=false;
 	downloadHandler=NULL;
 	url="";
 	hIcon=LoadIcon(hInst, MAKEINTRESOURCE(IDI_CEFCLIENT));
@@ -1110,7 +1114,17 @@ void TransparentWnd::Max(){
 }
 
 void TransparentWnd::Mini(){
-	ShowWindow(hWnd, SW_MINIMIZE);
+	if(isTransparent){
+		ShowWindow(hWnd, SW_HIDE);
+	}
+	else{
+		if(GetWindowLong(hWnd, GWL_EXSTYLE)&WS_EX_TOOLWINDOW){
+			ShowWindow(hWnd, SW_HIDE);
+		}
+		else{
+			ShowWindow(hWnd, SW_MINIMIZE);
+		}
+	}
 	ShowWindow(renderWindow, SW_MINIMIZE);
 }
 
@@ -1153,7 +1167,8 @@ void TransparentWnd::Move(int x, int y){
 	this->y=y;
 	MoveHandler(x,y);
 	if(isTransparent){
-		MoveWindow(renderWindow, x, y, width, height, false);
+		SetWindowPos(renderWindow, 0, x, y, width, height, SWP_NOZORDER|SWP_NOACTIVATE|SWP_NOSIZE);
+		//MoveWindow(renderWindow, x, y, width, height, false);
 	}
 	else{
 		MoveWindow(hWnd, x, y, width, height, false);
@@ -1161,7 +1176,10 @@ void TransparentWnd::Move(int x, int y){
 }
 void TransparentWnd::Render(const void* buffer){
 	UINT size = width * height * 4;
-	if(size==0){
+	if(isMini){
+		return;
+	}
+	else if(size==0){
 		return;
 	}
 	CefRefPtr<CefBrowser> browser = NULL;
