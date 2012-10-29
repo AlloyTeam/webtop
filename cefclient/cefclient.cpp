@@ -231,6 +231,7 @@ void AppGetSettings(CefSettings& settings, CefRefPtr<CefApp>& app) {
   {
     std::string str = g_command_line->GetSwitchValue(cefclient::kGraphicsImpl);
     if (!str.empty()) {
+		
 #if defined(OS_WIN)
       if (str == cefclient::kGraphicsImpl_Angle)
         settings.graphics_implementation = ANGLE_IN_PROCESS;
@@ -243,6 +244,7 @@ void AppGetSettings(CefSettings& settings, CefRefPtr<CefApp>& app) {
       else if (str == cefclient::kGraphicsImpl_DesktopCmdBuffer)
         settings.graphics_implementation = DESKTOP_IN_PROCESS_COMMAND_BUFFER;
     }
+	 /*settings.graphics_implementation = DESKTOP_IN_PROCESS_COMMAND_BUFFER;*/
   }
 
   settings.local_storage_quota = GetIntValue(
