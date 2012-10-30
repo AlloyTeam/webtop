@@ -1316,7 +1316,7 @@ void InitCallback()
     "  webtop.findFiles = function(path,flag,handler) {"
 	"    handler=handler?handler:window['handler'];"
     "    native function findFiles(handler,path,flag);"
-	"    return findFiles(handler,path,flag);"
+	"    return JSON.parse(findFiles(handler,path,flag));"
     "  };"
     "  webtop.createMemory = function(name,filename,size,handler) {"
 	"    handler=handler?handler:window['handler'];"
