@@ -547,7 +547,9 @@ long GetFileSize(const TCHAR* filename){
 	if (NULL != hFile && INVALID_HANDLE_VALUE != hFile)
 	{
 		// Get the current file size
-		return GetFileSize(hFile, 0);
+		long l=GetFileSize(hFile, 0);
+		CloseHandle(hFile);
+		return l;
 	}
 	else{
 		return 0;

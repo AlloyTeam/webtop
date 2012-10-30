@@ -69,11 +69,12 @@ CefString TransparentWnd::GetOpenNames(CefString fileName){
 	ss<<"[\"";
     wchar_t* p = szFiles;
 	ss<<p<<"\"";
+    p += lstrlen(p) + 1;
     while(*p)
     {
 		wstring s(p);
-        p += lstrlen(p) + 1;
 		ss<<","<<"\""<<s<<"\"";
+		p += lstrlen(p) + 1;
         // "p" - name of each files
     }
 	ss<<"]";
