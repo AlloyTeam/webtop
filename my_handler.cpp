@@ -9,6 +9,7 @@
 #include "include/cef_download_handler.h"
 #include "system.h"
 #include "base64.h"
+#include "gb2uni.h"
 extern HINSTANCE hInst;
 extern int CDECL MessageBoxPrintf (TCHAR * szCaption, TCHAR * szFormat, ...)  ;
 
@@ -749,9 +750,14 @@ bool MyHandler::Execute(const CefString& name,
 			pStream=((AmfStream*)id);
 		}
 		pStream->ReadStringSimple(s1,l);
+		/*unsigned short int *s2=new unsigned short int[l+1];
+		ZeroMemory(s2,l+1);
+		gb2unicode(s2,s1,l);
+		CefString s((TCHAR*)s2);*/
 		CefString s(s1);
 		retval=CefV8Value::CreateString(s);
 		delete s1;
+		//delete s2;
 		return true;
 	}
 	else if(name=="writeString"){
