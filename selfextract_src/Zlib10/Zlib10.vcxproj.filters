@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{914bc5b6-7964-4ab3-a955-20560e7c750e}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{e3dbd600-4d95-44c6-8627-b89d9f613490}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Adler32.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DEFLATE.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="INFBLOCK.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="INFCODES.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="INFFAST.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="INFLATE.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="INFTREES.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="INFUTIL.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TREES.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Zlib10.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="zlibengn.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="zlibtest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ZUTIL.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DEFLATE.H">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="INFBLOCK.H">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="INFCODES.H">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="INFFAST.H">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="INFTREES.H">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="INFUTIL.H">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ZCONF.H">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ZLIB.H">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Zlib10.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="zlibengn.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ZUTIL.H">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,240 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_ICON1               ICON    DISCARDABLE     "res\\icon1.ico"
+IDI_ICON2               ICON    DISCARDABLE     "res\\open.ico"
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOG DISCARDABLE  0, 0, 217, 231
+STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_VISIBLE | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "About Self-Extract Data File Builder..."
+FONT 8, "Tahoma"
+BEGIN
+    ICON            IDI_ICON1,IDC_STATIC,24,16,20,20
+    LTEXT           "Self-Extract Data File Builder",IDC_APP_TITLE,62,5,139,
+                    9
+    LTEXT           "#",IDC_APP_VERSION,61,17,137,8
+    LTEXT           "Copyright © 2004 Chris. C",IDC_STATIC,61,27,86,8
+    CTEXT           "< WARNING MESSAGE HERE >",IDC_WARNING,11,140,194,51
+    CONTROL         "",IDC_STATIC,"Static",SS_BLACKFRAME | WS_BORDER,11,132,
+                    193,1
+    CONTROL         "List1",IDC_LIST1,"SysListView32",LVS_REPORT | WS_BORDER | 
+                    WS_TABSTOP,11,55,194,66
+    LTEXT           "Dependencies",IDC_STATIC,12,44,192,8
+    CTEXT           "Compression Library (Zlib) source code\r\nCopyright © 1995-2003 Jean-loup Gailly and Mark Adler",
+                    IDC_DISCLAIMER,11,196,194,25
+END
+
+IDD_MAINWND DIALOGEX 0, 0, 377, 281
+STYLE DS_MODALFRAME | DS_CENTER | WS_MINIMIZEBOX | WS_POPUP | WS_VISIBLE | 
+    WS_CAPTION | WS_SYSMENU
+CAPTION "."
+FONT 8, "Tahoma"
+BEGIN
+    EDITTEXT        IDC_EDIT1,61,14,289,14,ES_AUTOHSCROLL | ES_READONLY
+    PUSHBUTTON      ".",IDC_BUTTON1,353,14,15,14,BS_ICON
+    EDITTEXT        IDC_EDIT2,61,30,289,14,ES_AUTOHSCROLL | ES_READONLY
+    PUSHBUTTON      ".",IDC_BUTTON2,353,30,15,14,BS_ICON
+    CONTROL         "List1",IDC_LIST1,"SysListView32",LVS_REPORT | 
+                    LVS_SINGLESEL | LVS_NOLABELWRAP | WS_BORDER | WS_TABSTOP,
+                    3,67,370,184
+    LTEXT           "Source folder :",IDC_STATIC,9,16,48,8
+    LTEXT           "Output file :",IDC_STATIC,9,32,40,8
+    CONTROL         "Progress1",IDC_PROGRESS1,"msctls_progress32",PBS_SMOOTH,
+                    249,254,124,12
+    LTEXT           "",IDC_STATUS,3,254,243,12,0,WS_EX_STATICEDGE
+    GROUPBOX        "Build/Browse Self-Extract File Property",IDC_STATIC,3,3,
+                    370,61
+    LTEXT           "Auto Execute Program :",IDC_STATIC,9,48,78,8
+    COMBOBOX        IDC_COMBO1,89,47,126,156,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 1
+        RIGHTMARGIN, 214
+        BOTTOMMARGIN, 229
+    END
+
+    IDD_MAINWND, DIALOG
+    BEGIN
+        RIGHTMARGIN, 376
+        BOTTOMMARGIN, 280
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+#ifndef _MAC
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,2
+ PRODUCTVERSION 1,0,0,2
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x29L
+#else
+ FILEFLAGS 0x28L
+#endif
+ FILEOS 0x40004L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "Comments", "\0"
+            VALUE "CompanyName", "PassportONE.Com\0"
+            VALUE "FileDescription", "Self-Extract Data File Builder\0"
+            VALUE "FileVersion", "1, 0, 0, 2\0"
+            VALUE "InternalName", "SelfExtract\0"
+            VALUE "LegalCopyright", "Copyright © 2004\0"
+            VALUE "LegalTrademarks", "\0"
+            VALUE "OriginalFilename", "\0"
+            VALUE "PrivateBuild", "040518.2\0"
+            VALUE "ProductName", "SelfExtract\0"
+            VALUE "ProductVersion", "1, 0, 0, 2\0"
+            VALUE "SpecialBuild", "Windows XP/2000\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+#endif    // !_MAC
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MENU1 MENU DISCARDABLE 
+BEGIN
+    POPUP "File"
+    BEGIN
+        MENUITEM "&Exit",                       IDM_FILE_EXIT
+    END
+    POPUP "&Action"
+    BEGIN
+        MENUITEM "&Build Self-Extract File...", IDM_ACTION_BUILD, GRAYED
+        MENUITEM "&Stop Build/Browse...",       IDM_ACTION_STOP_BUILD
+        , GRAYED
+        MENUITEM SEPARATOR
+        MENUITEM "B&rowse Self-Extract File Contents...", IDM_ACTION_BROWSE
+        , GRAYED
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "About Self-Extract Data File Builder...", IDM_HELP_ABOUT
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// EXTRACTOR
+//
+
+IDR_EXTRACTOR1          EXTRACTOR DISCARDABLE   "bin\\SetupEx.exe"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_WARNING             "This software is provided 'as-is', without any express or implied warranty.  In no event will the authors be held liable for any damages arising from the use of this software.\n\nPermission is granted to anyone to use this software for any purpose, including commercial applications, and to alter it and redistribute it freely."
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
