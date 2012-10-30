@@ -134,7 +134,53 @@ BOOL  OpenFileDialog(HWND hWnd, const TCHAR* fileNameStr, TCHAR* szFile)
 //no extention file!    ofn.lpstrFilter="Any file(*.*)\0*.*\0ddfs\0ddfs*\0";
 	return(GetOpenFileName((LPOPENFILENAME)&ofn));
 }
+BOOL  OpenMultiFilesDialog(HWND hWnd, const TCHAR* fileNameStr, TCHAR* szFile)
+{
+	//TCHAR szFile[2048];
+	OPENFILENAME ofn;
+	ZeroMemory(&ofn, sizeof(ofn));
+	ofn.lStructSize = sizeof(ofn);
+// must !
+	ofn.lpstrFile = szFile;
+	ofn.lpstrTitle = TEXT("打开文件");
+	ofn.lpstrFileTitle=(LPWSTR)fileNameStr;
+	ofn.nMaxFile = 2048;//sizeof(szFile);
+//
+	ofn.lpstrFile[0] = '\0';
+	wcscpy(ofn.lpstrFile, (LPWSTR)fileNameStr);
+	ofn.Flags = OFN_FILEMUSTEXIST|OFN_ALLOWMULTISELECT|OFN_EXPLORER;
+//no extention file!    ofn.lpstrFilter="Any file(*.*)\0*.*\0ddfs\0ddfs*\0";
+	return(GetOpenFileName((LPOPENFILENAME)&ofn));
+}
+void GetFolder (HWND hWnd, TCHAR* szSelFolder)
+{
+	BROWSEINFO		bi = {NULL};
+	LPITEMIDLIST	lpIDList = NULL;
 
+	// Setup BROWSEINFO structure
+	bi.hwndOwner 	= hWnd;
+	bi.pidlRoot		= NULL;
+	bi.lpszTitle	= TEXT("Save self-extract data file to...");
+	bi.ulFlags		= BIF_RETURNONLYFSDIRS;
+	bi.lpfn			= NULL;
+	bi.pszDisplayName	= szSelFolder;
+
+	// Load the Browse folder dialog
+	lpIDList = SHBrowseForFolder(&bi);
+	// Get the selected path from IDList
+	SHGetPathFromIDList(lpIDList, szSelFolder);
+	// Free the resources
+	CoTaskMemFree(lpIDList);
+		
+	// Check the selected folder
+	if (wcslen(szSelFolder) > 0)
+	{
+		// Check is the last character is "\", if not, an extra "\" was append on it.
+		if (92 != szSelFolder[wcslen(szSelFolder) - 1]) {wcsncat(szSelFolder, L"\\", 1);}
+
+		// Display the selected folder in the edit control
+	}
+}
 //可同时处理目录和文件:path可以是路径，也可以是文件名，或者文件通配符
 wstring find(wstring path,bool cursive)
 { 
@@ -488,4 +534,22 @@ void SaveBitmap(Bitmap* pbm, wstring path){
 	CLSID tiffClsid;
 	GetEncoderClsid((L"image/"+ GetExtW(path)).data(), &tiffClsid);
 	pbm->Save(path.data(), &tiffClsid);
+}
+long GetFileSize(const TCHAR* filename){
+	HANDLE hFile = CreateFile(filename,
+							   GENERIC_READ,
+							   FILE_SHARE_READ,
+							   NULL,
+							   OPEN_EXISTING,
+							   FILE_ATTRIBUTE_NORMAL,
+							   NULL);
+			// Check the return handle value
+	if (NULL != hFile && INVALID_HANDLE_VALUE != hFile)
+	{
+		// Get the current file size
+		return GetFileSize(hFile, 0);
+	}
+	else{
+		return 0;
+	}
 }

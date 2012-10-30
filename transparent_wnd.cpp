@@ -61,10 +61,35 @@ CefString TransparentWnd::GetSaveName(CefString fileName){
 	CefString s(d);
 	return s;
 }
+CefString TransparentWnd::GetOpenNames(CefString fileName){
+	TCHAR szFiles[4096];
+	OpenMultiFilesDialog(hWnd, fileName.ToWString().data(), szFiles);
+    // Multi-Select
+	std::wstringstream ss;
+	ss<<"[\"";
+    wchar_t* p = szFiles;
+	ss<<p<<"\"";
+    while(*p)
+    {
+		wstring s(p);
+        p += lstrlen(p) + 1;
+		ss<<","<<"\""<<s<<"\"";
+        // "p" - name of each files
+    }
+	ss<<"]";
+	return ss.str();
+}
 CefString TransparentWnd::GetOpenName(CefString fileName){
-	TCHAR szFile[2048];
+	TCHAR szFile[4096];
 	OpenFileDialog(hWnd, fileName.ToWString().data(), szFile);
 	wstring d(szFile);
+	CefString s(d);
+	return s;
+}
+CefString TransparentWnd::GetFolder(){
+	TCHAR szFolder[4096];
+	::GetFolder(hWnd,szFolder);
+	wstring d(szFolder);
 	CefString s(d);
 	return s;
 }

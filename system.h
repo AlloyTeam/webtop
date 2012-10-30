@@ -16,6 +16,7 @@ BOOL Logoff(BOOL bForce);
 BOOL Reboot(BOOL bForce);
 BOOL  SaveFileDialog(HWND hWnd, const TCHAR* fileNameStr, TCHAR* szFile);
 BOOL  OpenFileDialog(HWND hWnd, const TCHAR* fileNameStr, TCHAR* szFile);
+BOOL  OpenMultiFilesDialog(HWND hWnd, const TCHAR* fileNameStr, TCHAR* szFile);
 int CDECL MessageBoxPrintf (TCHAR * szCaption, TCHAR * szFormat, ...);
 	BOOL ModifyStyle(
 		HWND hWnd,
@@ -29,5 +30,7 @@ wstring find(wstring path,bool cursive=false);
 Bitmap* GetImageFromBase64(string encodedImage);
 int   GetEncoderClsid(const   WCHAR*   format,   CLSID*   pClsid);
 void SaveBitmap(Bitmap* pbm, wstring path);
+void GetFolder (HWND hWnd, TCHAR* szSelFolder);
+long GetFileSize(const TCHAR* filename);
 
 #endif

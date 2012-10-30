@@ -522,6 +522,20 @@ bool MyHandler::Execute(const CefString& name,
 		retval = CefV8Value::CreateString(winHandler->GetOpenName(s));
 		return true;
 	}
+	else if(name=="getOpenNames"){
+		CefString s = arguments[1]->GetStringValue();
+		retval = CefV8Value::CreateString(winHandler->GetOpenNames(s));
+		return true;
+	}
+	else if(name=="getFileSize"){
+		CefString s = arguments[1]->GetStringValue();
+		retval = CefV8Value::CreateDouble(GetFileSize(s.ToWString().data()));
+		return true;
+	}
+	else if(name=="getFolder"){
+		retval = CefV8Value::CreateString(winHandler->GetFolder());
+		return true;
+	}
 	else if(name == "move")
 	{
 		int x = static_cast<int>(arguments[1]->GetIntValue());
@@ -1183,6 +1197,21 @@ void InitCallback()
 	"    handler=handler?handler:window['handler'];"
     "    native function getOpenName(handler,filename);"
 	"    return getOpenName(handler,filename);"
+    "  };"
+    "  webtop.getOpenNames = function(filename,handler) {"
+	"    handler=handler?handler:window['handler'];"
+    "    native function getOpenNames(handler,filename);"
+	"    return JSON.parse(getOpenNames(handler,filename).replace(/\\\\/g,'\\\\\\\\'));"
+    "  };"
+    "  webtop.getFileSize = function(filename,handler) {"
+	"    handler=handler?handler:window['handler'];"
+    "    native function getFileSize(handler,filename);"
+	"    return getFileSize(handler,filename);"
+    "  };"
+    "  webtop.getFolder = function(handler) {"
+	"    handler=handler?handler:window['handler'];"
+    "    native function getFolder(handler);"
+	"    return getFolder(handler);"
     "  };"
     "  webtop.reload = function(handler) {"
 	"    handler=handler?handler:window['handler'];"

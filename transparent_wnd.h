@@ -80,6 +80,7 @@ public:
 	bool enableResize;
 	CefString GetSaveName(CefString fileName);
 	CefString GetOpenName(CefString fileName);
+	CefString GetOpenNames(CefString fileName);
 	void ExecJS(CefString s);
 	void Ready();
 	HICON GetIcon(CefString path);
@@ -106,6 +107,7 @@ public:
 	AmfStream* CreateStream(CSFMServer* mem);
 	void SaveImageFromStream(CefString path,AmfStream* pStream,int width,int height);
 	void DeleteStream(AmfStream* pStream);
+	CefString GetFolder();
 	HICON hIcon;
 	CSFMClient* pClient;
 	AmfStream* pStream;
