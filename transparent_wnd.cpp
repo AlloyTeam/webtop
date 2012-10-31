@@ -1004,11 +1004,28 @@ CefString TransparentWnd::ReadFile(CefString path){
 	ifstream fin(pathS);
 	std::stringstream ss;
 	string s;
-	while(getline(fin, s)){
-		ss << s << "\n";
+	if(getline(fin, s)){
+		ss << s;
+		while(getline(fin, s)){
+			ss <<'\n'<< s;
+		}
+	}
+	s=ss.str();
+	int l=s.length();
+	const char* s1=s.c_str();
+	CefString cs;
+	if(isGB(s1,l)){
+		DWORD dwNum = MultiByteToWideChar (CP_ACP, 0, s1, -1, NULL, 0);
+		WCHAR *s2=new WCHAR[dwNum];
+		::MultiByteToWideChar(CP_ACP,0,s1,-1,s2,dwNum);
+		cs=s2;
+		delete []s2;
+	}
+	else{
+		cs=s1;
 	}
 	fin.close();
-	return ss.str();
+	return cs;
 }
 
 bool TransparentWnd::WriteFile(CefString path, CefString s){

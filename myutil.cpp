@@ -29,3 +29,12 @@ wstring&   replace_all_distinct(wstring&   str,const   wstring&   old_value,cons
     return   str;   
 }
 
+bool isGB(const char*gb,int len){
+	for(int i=0;i<len;++i){
+		if(gb[i]<0){
+			return true;
+		}
+	}
+	return false;
+}
+

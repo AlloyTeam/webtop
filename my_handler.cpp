@@ -9,7 +9,6 @@
 #include "include/cef_download_handler.h"
 #include "system.h"
 #include "base64.h"
-#include "gb2uni.h"
 extern HINSTANCE hInst;
 extern int CDECL MessageBoxPrintf (TCHAR * szCaption, TCHAR * szFormat, ...)  ;
 
@@ -706,7 +705,7 @@ bool MyHandler::Execute(const CefString& name,
 		pStream->ReadString(s1,NULL,l);
 		CefString s(s1);
 		retval=CefV8Value::CreateString(s);
-		delete s1;
+		delete []s1;
 		return true;
 	}
 	else if(name=="writeStringEx"){
@@ -729,7 +728,7 @@ bool MyHandler::Execute(const CefString& name,
 		pStream->ReadWString(s1,NULL,l*2);
 		CefString s(s1);
 		retval=CefV8Value::CreateString(s);
-		delete s1;
+		delete []s1;
 		return true;
 	}
 	else if(name=="writeWStringEx"){
@@ -750,14 +749,19 @@ bool MyHandler::Execute(const CefString& name,
 			pStream=((AmfStream*)id);
 		}
 		pStream->ReadStringSimple(s1,l);
-		/*unsigned short int *s2=new unsigned short int[l+1];
-		ZeroMemory(s2,l+1);
-		gb2unicode(s2,s1,l);
-		CefString s((TCHAR*)s2);*/
-		CefString s(s1);
+		CefString s;
+		if(isGB(s1,l)){
+			DWORD dwNum = MultiByteToWideChar (CP_ACP, 0, s1, -1, NULL, 0);
+			WCHAR *s2=new WCHAR[dwNum];
+			::MultiByteToWideChar(CP_ACP,0,s1,-1,s2,dwNum);
+			s=s2;
+			delete []s2;
+		}
+		else{
+			s=s1;
+		}
 		retval=CefV8Value::CreateString(s);
-		delete s1;
-		//delete s2;
+		delete []s1;
 		return true;
 	}
 	else if(name=="writeString"){
@@ -780,7 +784,7 @@ bool MyHandler::Execute(const CefString& name,
 		pStream->ReadWStringSimple(s1,l*2);
 		CefString s(s1);
 		retval=CefV8Value::CreateString(s);
-		delete s1;
+		delete []s1;
 		return true;
 	}
 	else if(name=="writeWString"){
