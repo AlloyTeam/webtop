@@ -363,13 +363,13 @@ void AppGetBrowserSettings(CefBrowserSettings& settings) {
       g_command_line->HasSwitch(cefclient::kDatabasesDisabled);
   settings.application_cache_disabled =
       g_command_line->HasSwitch(cefclient::kApplicationCacheDisabled);
-  settings.webgl_disabled = true;
+  settings.webgl_disabled = 
       g_command_line->HasSwitch(cefclient::kWebglDisabled);
-  settings.accelerated_compositing_enabled = true;
+  settings.accelerated_compositing_enabled = 
       g_command_line->HasSwitch(cefclient::kAcceleratedCompositingEnabled);
   settings.threaded_compositing_enabled =
       g_command_line->HasSwitch(cefclient::kThreadedCompositingEnabled);
-  settings.accelerated_layers_disabled =
+  settings.accelerated_layers_disabled = true;//
       g_command_line->HasSwitch(cefclient::kAcceleratedLayersDisabled);
   settings.accelerated_video_disabled =
       g_command_line->HasSwitch(cefclient::kAcceleratedVideoDisabled);
