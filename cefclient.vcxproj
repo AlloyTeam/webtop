@@ -277,6 +277,7 @@
     <None Include="cefclient\res\logo.png" />
     <None Include="cefclient\res\uiplugin.html" />
     <None Include="include\internal\npapi\README-TRANSFER.txt" />
+    <None Include="Release\ip.js" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AmfStream.h" />

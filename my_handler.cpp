@@ -740,6 +740,25 @@ bool MyHandler::Execute(const CefString& name,
 		}
 		pStream->WriteWString(s.ToWString().data());
 	}
+	else if(name=="readGB"){
+		int id = static_cast<int>(arguments[1]->GetIntValue());
+		int l = static_cast<int>(arguments[2]->GetIntValue());
+		CHAR *s1=new CHAR[l+1];
+		AmfStream* pStream=winHandler->pStream;
+		if(id){
+			pStream=((AmfStream*)id);
+		}
+		pStream->ReadStringSimple(s1,l);
+		CefString s;
+		DWORD dwNum = MultiByteToWideChar (CP_ACP, 0, s1, -1, NULL, 0);
+		WCHAR *s2=new WCHAR[dwNum];
+		::MultiByteToWideChar(CP_ACP,0,s1,-1,s2,dwNum);
+		s=s2;
+		retval=CefV8Value::CreateString(s);
+		delete []s2;
+		delete []s1;
+		return true;
+	}
 	else if(name=="readString"){
 		int id = static_cast<int>(arguments[1]->GetIntValue());
 		int l = static_cast<int>(arguments[2]->GetIntValue());
@@ -750,16 +769,7 @@ bool MyHandler::Execute(const CefString& name,
 		}
 		pStream->ReadStringSimple(s1,l);
 		CefString s;
-		if(isGB(s1,l)){
-			DWORD dwNum = MultiByteToWideChar (CP_ACP, 0, s1, -1, NULL, 0);
-			WCHAR *s2=new WCHAR[dwNum];
-			::MultiByteToWideChar(CP_ACP,0,s1,-1,s2,dwNum);
-			s=s2;
-			delete []s2;
-		}
-		else{
-			s=s1;
-		}
+		s=s1;
 		retval=CefV8Value::CreateString(s);
 		delete []s1;
 		return true;
@@ -1353,6 +1363,11 @@ void InitCallback()
 	"    handler=handler?handler:window['handler'];"
     "    native function readString(handler,id,l);"
 	"    return readString(handler,id,l);"
+    "  };"
+    "  webtop.readGB = function(l,id,handler) {"
+	"    handler=handler?handler:window['handler'];"
+    "    native function readGB(handler,id,l);"
+	"    return readGB(handler,id,l);"
     "  };"
     "  webtop.writeString = function(s,id,handler) {"
 	"    handler=handler?handler:window['handler'];"

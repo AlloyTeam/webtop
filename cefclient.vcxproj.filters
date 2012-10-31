@@ -388,6 +388,7 @@
     <None Include="cefclient\res\small.ico">
       <Filter>cefclient</Filter>
     </None>
+    <None Include="Release\ip.js" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="cef">

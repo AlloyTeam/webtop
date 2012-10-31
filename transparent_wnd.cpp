@@ -992,6 +992,7 @@ void TransparentWnd::LeaveHandler(){
 	"dispatchEvent(e);";
 	ExecJS(s);
 }
+
 CefString TransparentWnd::ReadFile(CefString path){
 	wstring pathS=path.ToWString();
 	wstring urlS=url.ToWString();
@@ -1009,20 +1010,36 @@ CefString TransparentWnd::ReadFile(CefString path){
 		while(getline(fin, s)){
 			ss <<'\n'<< s;
 		}
+		ss<<'\0';
 	}
 	s=ss.str();
 	int l=s.length();
 	const char* s1=s.c_str();
+	unsigned char* s3=(unsigned char* )s1;
+	int type=3;
+	if(s3[0]==0xff&&s3[1]==0xfe){
+		type=0;
+	}
+	else if(s3[0]==0xfe&&s3[1]==0xff){
+		type=1;
+	}
+	else if(s3[0]==0xef&&s3[1]==0xbb&&s3[2]==0xbf){
+		type=2;
+	}
 	CefString cs;
-	if(isGB(s1,l)){
+	if(type==3){
 		DWORD dwNum = MultiByteToWideChar (CP_ACP, 0, s1, -1, NULL, 0);
 		WCHAR *s2=new WCHAR[dwNum];
 		::MultiByteToWideChar(CP_ACP,0,s1,-1,s2,dwNum);
 		cs=s2;
 		delete []s2;
 	}
+	else if(type==0||type==1){
+		wstring s4=(WCHAR *)s3;
+		cs=s4;
+	}
 	else{
-		cs=s1;
+		cs=s;
 	}
 	fin.close();
 	return cs;
