@@ -529,7 +529,11 @@ bool MyHandler::Execute(const CefString& name,
 	}
 	else if(name=="getFileSize"){
 		CefString s = arguments[1]->GetStringValue();
-		retval = CefV8Value::CreateDouble(GetFileSize(s.ToWString().data()));
+		retval = CefV8Value::CreateDouble(GetFileSize(winHandler->TranslatePath(s).ToWString().data()));
+		return true;
+	}
+	else if(name=="getCurrentDirectory"){
+		retval = CefV8Value::CreateString(winHandler->GetCurrentDirectory());
 		return true;
 	}
 	else if(name=="getFolder"){
@@ -1337,6 +1341,11 @@ void InitCallback()
 	"    handler=handler?handler:window['handler'];"
     "    native function findFiles(handler,path,flag);"
 	"    return JSON.parse(findFiles(handler,path,flag));"
+    "  };"
+    "  webtop.getCurrentDirectory = function(handler) {"
+	"    handler=handler?handler:window['handler'];"
+    "    native function getCurrentDirectory(handler);"
+	"    return getCurrentDirectory(handler);"
     "  };"
     "  webtop.createMemory = function(name,filename,size,handler) {"
 	"    handler=handler?handler:window['handler'];"

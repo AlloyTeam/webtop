@@ -160,6 +160,9 @@ void TransparentWnd::RunApp(CefString appName, CefString param, CefString baseUr
 	}
 	CreateBrowser(appNameW,param);
 }
+CefString TransparentWnd::GetCurrentDirectory(){
+	return folder;
+}
 void TransparentWnd::RunAppIn(CefString appName, CefString param, CefString baseUrl){
 	wstring appNameW=appName.ToWString();
 	if(appNameW.find(L":")==-1){
@@ -178,7 +181,8 @@ void TransparentWnd::RunAppIn(CefString appName, CefString param, CefString base
 	int w,h,_x,_y;
 	int enableDrag=0,disableTransparent=0,exStyle=0,hasBorder=false,_max=false,_enableResize=false,disableRefresh=0,disableDevelop=0;
 	TCHAR url[1000],name[100],iconPath[1000];
-	wstring folder=appNameW.substr(0,appNameW.find_last_of('/')+1);;
+	wstring _folder=appNameW.substr(0,appNameW.find_last_of('/')+1);
+	folder=_folder;
 	GetPrivateProfileString(L"BASE",L"url",NULL,url,1000,appNameW.data());
 	GetPrivateProfileString(L"BASE",L"name",NULL,name,100,appNameW.data());
 	GetPrivateProfileString(L"BASE",L"icon",NULL,iconPath,1000,appNameW.data());
@@ -206,7 +210,7 @@ void TransparentWnd::RunAppIn(CefString appName, CefString param, CefString base
 	CefString cefFile(url);
 	wstring file=cefFile.ToWString();
 	if(file.find(L":")==-1){
-		file=folder.append(file);
+		file=_folder.append(file);
 	}
 	bool isTransparent=disableTransparent==0;
 	if(hasBorder){
@@ -1024,6 +1028,9 @@ CefString TransparentWnd::ReadFile(CefString path){
 		type=1;
 	}
 	else if(s3[0]==0xef&&s3[1]==0xbb&&s3[2]==0xbf){
+		type=2;
+	}
+	else if(IsTextUTF8(s1,l)){
 		type=2;
 	}
 	CefString cs;

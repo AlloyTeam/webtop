@@ -7,5 +7,6 @@ wstring&   replace_allW(wstring&   str,const   wstring&   old_value,const   wstr
 wstring&   replace_all_distinct(wstring&   str,const   wstring&   old_value,const   wstring&   new_value);
 string&   replace_all(string&   str,const   string&   old_value,const   string&   new_value);
 bool isGB(const char*gb,int len);
+int IsTextUTF8(const char* str,long length);
 
 #endif

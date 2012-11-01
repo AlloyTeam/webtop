@@ -116,11 +116,13 @@ public:
 	bool enableDevelop;
 	bool isMini;
 	bool isHide;
+	CefString GetCurrentDirectory();
 	void RecieveMessage(int type, char* message, char* ip, unsigned short port);
 	void ShowTip(CefString& text);
 	void *pTipWin;
 	static CSFMServer* pSever;
 	P2P p2p;
+	CefString folder;
 	int restoreX;
 	int restoreY;
 	void GetUsers();
