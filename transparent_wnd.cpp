@@ -1014,7 +1014,6 @@ CefString TransparentWnd::ReadFile(CefString path){
 		while(getline(fin, s)){
 			ss <<'\n'<< s;
 		}
-		ss<<'\0';
 	}
 	s=ss.str();
 	int l=s.length();
