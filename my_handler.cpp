@@ -9,6 +9,7 @@
 #include "include/cef_download_handler.h"
 #include "system.h"
 #include "base64.h"
+#include "filter_handler.h"
 extern HINSTANCE hInst;
 extern int CDECL MessageBoxPrintf (TCHAR * szCaption, TCHAR * szFormat, ...)  ;
 
@@ -246,8 +247,8 @@ void MyHandler::OnHttpResponse(const CefString& url,
 	int64 startTime, 
 	int64 endTime) {
 	string s=url.ToString();
-	if(s.find("download=true")!=string::npos){
-		
+	if(s.find("webtop_download=")!=string::npos){
+		this->contentLength=contentLength;
 	}
 }
 
@@ -255,6 +256,14 @@ void MyHandler::OnResourceResponse(CefRefPtr<CefBrowser> browser,
                                   const CefString& url,
                                   CefRefPtr<CefResponse> response,
                                   CefRefPtr<CefContentFilter>& filter) {
+	string s=url.ToString();
+	if(s.find("webtop_download=")!=string::npos){
+		int index1=s.find("webtop_download=");
+		s=s.substr(index1+16);
+		ClientFilterHandler * myfilter=new ClientFilterHandler();
+		myfilter->SetWinHandler((void *)this->win,s,contentLength);
+		filter=myfilter;
+	}
 }
 
 bool MyHandler::OnBeforeResourceLoad(CefRefPtr<CefBrowser> browser,
@@ -997,6 +1006,11 @@ bool MyHandler::Execute(const CefString& name,
 		retval=CefV8Value::CreateInt((int)winHandler->CreateMemory(name,filename,size));
 		return true;
 	}
+	else if(name=="download"){
+		CefString url=arguments[1]->GetStringValue();
+		CefString filename=arguments[2]->GetStringValue();
+		winHandler->Download(url,filename);
+	}
 	else if(name == "deleteMemory"){
 		int id = static_cast<int>(arguments[1]->GetIntValue());
 		winHandler->DeleteMemory((CSFMServer*)id);
@@ -1216,6 +1230,11 @@ void InitCallback()
 	"    handler=handler?handler:window['handler'];"
     "    native function runAppEx(handler,appName,param);"
 	"    return runAppEx(handler,appName,param);"
+    "  };"
+    "  webtop.download = function(url,filename,handler) {"
+	"    handler=handler?handler:window['handler'];"
+    "    native function download(handler,url,filename);"
+	"    return download(handler,url,filename);"
     "  };"
     "  webtop.getOpenName = function(filename,handler) {"
 	"    handler=handler?handler:window['handler'];"

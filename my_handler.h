@@ -10,6 +10,7 @@ public:
   long win;
   int width;
   int height;
+  int contentLength;
   MyHandler();
   virtual ~MyHandler();
   // CefLoadHandler methods

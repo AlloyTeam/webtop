@@ -32,5 +32,6 @@ int   GetEncoderClsid(const   WCHAR*   format,   CLSID*   pClsid);
 void SaveBitmap(Bitmap* pbm, wstring path);
 void GetFolder (HWND hWnd, TCHAR* szSelFolder);
 long GetFileSize(const TCHAR* filename);
+void ChangeFileSize(const TCHAR* filename,DWORD size);
 
 #endif

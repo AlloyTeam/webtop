@@ -63,6 +63,8 @@ class CefContentFilter : public virtual CefBase {
   ///
   /*--cef()--*/
   virtual void Drain(CefRefPtr<CefStreamReader>& remainder) {}
+
+
 };
 
 #endif  // CEF_INCLUDE_CEF_CONTENT_FILTER_H_

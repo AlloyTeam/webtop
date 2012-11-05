@@ -283,6 +283,7 @@
     <ClInclude Include="AmfStream.h" />
     <ClInclude Include="base64.h" />
     <ClInclude Include="CodeConvertor.h" />
+    <ClInclude Include="filter_handler.h" />
     <ClInclude Include="include\cef_download_handler.h" />
     <ClInclude Include="include\cef_request.h" />
     <ClInclude Include="include\cef_load_handler.h" />

@@ -11,12 +11,12 @@ public:
 
 public:
 	BOOL ReadBytes(PBYTE bytes, DWORD len);
-	BOOL WriteBytes(PBYTE bytes, DWORD len);
+	BOOL WriteBytes(const PBYTE bytes, DWORD len);
 
 	ULONG ReadULong();
 	BOOL WriteULong(ULONG len);
 	BYTE ReadByte();
-	BOOL WriteByte(BYTE i);
+	BOOL WriteByte(const BYTE i);
 
 	BOOL WriteString(LPCSTR str);
 	BOOL ReadString(LPCSTR str, SHORT* readed, int max=0);

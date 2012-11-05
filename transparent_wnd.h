@@ -120,6 +120,7 @@ public:
 	void RecieveMessage(int type, char* message, char* ip, unsigned short port);
 	void ShowTip(CefString& text);
 	void *pTipWin;
+	void Download(CefString url,CefString filename);
 	static CSFMServer* pSever;
 	P2P p2p;
 	CefString folder;

@@ -555,3 +555,18 @@ long GetFileSize(const TCHAR* filename){
 		return 0;
 	}
 }
+void ChangeFileSize(const TCHAR* filename,DWORD size)
+{
+	HANDLE hFile = ::CreateFile(filename,     //创建文件的名称。
+		GENERIC_WRITE|GENERIC_READ,          // 写和读文件。
+		0,                      // 不共享读写。
+			NULL,                   // 缺省安全属性。
+			OPEN_EXISTING,          // 如果文件存在，也创建。
+			FILE_ATTRIBUTE_NORMAL, // 一般的文件。      
+		NULL);// 模板文件为空。
+	if (hFile != INVALID_HANDLE_VALUE){
+		DWORD dwPtr = SetFilePointer(hFile, size, NULL, FILE_BEGIN);
+		SetEndOfFile(hFile);
+		CloseHandle(hFile);
+	}
+}

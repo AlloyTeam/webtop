@@ -1346,6 +1346,20 @@ void TransparentWnd::StartDrag(){
 void TransparentWnd::EnableDrag(){
 	isEnableDrag=true;
 }
+void TransparentWnd::Download(CefString url,CefString filename){
+	std::stringstream ss;
+	string s=url.ToString();
+	ss<<"var img = new Image();"
+		<<"img.src='"<<url.ToString();
+	if(s.find("?")==string::npos){
+		ss<<"?t='+Date.now()+'&webtop_download=";
+	}
+	else{
+		ss<<"&webtop_download=";
+	}
+	ss<<filename.ToString()<<"';";
+	this->ExecJS(ss.str());
+}
 void TransparentWnd::SetSize(int w, int h){
 	this->width=w;
 	this->height=h;

@@ -25,7 +25,7 @@ BOOL AmfStream::ReadBytes(PBYTE bytes, DWORD len)
 	return FALSE;
 }
 
-BOOL AmfStream::WriteBytes(PBYTE bytes, DWORD len)
+BOOL AmfStream::WriteBytes(const PBYTE bytes, DWORD len)
 {
 	if (!IsBadWritePtr(&stream[position], len))
 	{
@@ -73,7 +73,7 @@ BYTE AmfStream::ReadByte()
 	return 0;
 }
 
-BOOL AmfStream::WriteByte(BYTE i)
+BOOL AmfStream::WriteByte(const BYTE i)
 {
 	if (!IsBadWritePtr(&stream[position], 1))
 	{

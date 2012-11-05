@@ -44,7 +44,6 @@ addEventListener("webtopReady",readyHandler);
 addEventListener("webtopP2PRecieveMessage",messageHandler);
 addEventListener("webtopP2PInitInfo",p2pInitHandler);
 addEventListener("webtopP2PUpdateUserList",p2pInitHandler);
-addEventListener("webtopMouseLeave",function(){console.log('leave');});
 function dockImages(oWrap){
 	var aImg=oWrap.getElementsByTagName('img');
 	var rect=oWrap.getBoundingClientRect();
@@ -81,5 +80,5 @@ function jsonp(url, callback) {
 		}
 	}
 }
-jsonp('http://download.alloyteam.com/webtop/ip.js?t='+Date.now());
+setTimeout(function(){jsonp('http://download.alloyteam.com/webtop/ip.js?t='+Date.now());},100);
 //var bg=new ImgBg('images/bg.png',870,635,$('wrapper'),10,10,10,10);

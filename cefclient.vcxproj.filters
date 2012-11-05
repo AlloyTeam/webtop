@@ -341,6 +341,9 @@
     <ClInclude Include="cefclient\cefclient.h">
       <Filter>cefclient</Filter>
     </ClInclude>
+    <ClInclude Include="filter_handler.h">
+      <Filter>cefclient</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="cefclient.gyp">
