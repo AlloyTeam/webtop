@@ -156,7 +156,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 	}
 
 	// Shut down CEF.
-	CefShutdown();
+	//CefShutdown();
 
 	return result;
 }

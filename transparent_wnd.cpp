@@ -884,18 +884,25 @@ TransparentWnd::~TransparentWnd(void)
 	SendMessage(hWnd, WM_CLOSE, 0, 0);
 	SendMessage(renderWindow, WM_CLOSE, 0, 0);
 	--count;
+	if (g_handler.get()) {
+		CefRefPtr<CefBrowser> browser = g_handler->GetBrowser();
+		if (browser.get()) {
+			// Let the browser window know we are about to destroy it.
+			browser->ParentWindowWillClose();
+		}
+	}
 	delete pClient;
 	delete pStream;
-	if(count==0){
-		delete pServer;
-		GdiplusShutdown(m_gdiplusToken);
-		PostQuitMessage(0);
-	}
 	if(hBitMap){
 		DeleteObject(hBitMap);
 	}
 	if(pTipWin){
 		delete (TransparentWnd*)pTipWin;
+	}
+	if(count==0){
+		delete pServer;
+		GdiplusShutdown(m_gdiplusToken);
+		PostQuitMessage(0);
 	}
 }
 

@@ -398,7 +398,7 @@ struct CefBrowserSettingsTraits {
         src->author_and_user_styles_disabled;
     target->local_storage_disabled = src->local_storage_disabled;
     target->databases_disabled = src->databases_disabled;
-    target->application_cache_disabled = src->application_cache_disabled;
+    target->application_cache_disabled = //src->application_cache_disabled;
     target->webgl_disabled = src->webgl_disabled;
     target->accelerated_compositing_enabled =
         src->accelerated_compositing_enabled;

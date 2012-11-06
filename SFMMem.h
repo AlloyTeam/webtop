@@ -54,7 +54,7 @@ private:
 	void _Destory();
 
 public:
-	void Create(const TCHAR *szFileName, const TCHAR *szMapName, DWORD dwSize);
+	void Create(const TCHAR *szFileName, const TCHAR *szMapName, DWORD dwSize, DWORD dwSizeHigh=0);
 	LPVOID GetBuffer();
 	DWORD GetSize();
 };

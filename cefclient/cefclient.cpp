@@ -19,6 +19,7 @@
 #include "cefclient/binding_test.h"
 #include "cefclient/string_util.h"
 #include "cefclient/util.h"
+#include "include/cef_storage.h"
 
 namespace {
 
@@ -191,6 +192,7 @@ void AppGetSettings(CefSettings& settings, CefRefPtr<CefApp>& app) {
   cachePath.append(L"cache/");
   CefString(&settings.cache_path) = cachePath;
       //g_command_line->GetSwitchValue(cefclient::kCachePath);
+  //CefSetStoragePath(ST_LOCALSTORAGE, cachePath);
   CefString(&settings.user_agent) =
       g_command_line->GetSwitchValue(cefclient::kUserAgent);
   CefString(&settings.product_version) =

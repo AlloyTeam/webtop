@@ -81,7 +81,7 @@ void CSFMServer::_Destory()
 	_Init();
 }
 
-void CSFMServer::Create(const TCHAR *szFileName, const TCHAR *szMapName, DWORD dwSize)
+void CSFMServer::Create(const TCHAR *szFileName, const TCHAR *szMapName, DWORD dwSize, DWORD dwSizeHigh)
 {
 	if (m_iCreateFlag)
 		_Destory();
@@ -123,7 +123,7 @@ void CSFMServer::Create(const TCHAR *szFileName, const TCHAR *szMapName, DWORD d
 			m_hFile,
 			NULL,
 			PAGE_READWRITE,
-			0,
+			dwSizeHigh,
 			m_dwSize,
 			m_pMapName
 			);
