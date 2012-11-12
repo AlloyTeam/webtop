@@ -106,8 +106,13 @@ class ClientFilterHandler : public CefContentFilter {
 		ChangeFileSize(filename.ToWString().data(),count);
 	}
 	std::stringstream ss;
-	ss<<"var e = new CustomEvent('webtopDownloadComplete');"
-		<<"dispatchEvent(e);";
+	ss<<"var e = new CustomEvent('webtopDownloadComplete',{"
+			<<"	detail:{"
+			<<"		filename:\""<<filename.ToString()<<"\","
+			<<"		count:"<<count
+			<<"	}"
+			<<"});"
+			<<"dispatchEvent(e);";
 	winHandler->ExecJS(ss.str());
  }
 
