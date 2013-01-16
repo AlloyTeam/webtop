@@ -110,7 +110,7 @@ void TransparentWnd::EnableTransparent(UINT ex_style){
 	if(g_handler->GetBrowser()){
 		g_handler->GetBrowser()->GetMainFrame()->LoadURL(url);
 	}
-	ModifyStyle(renderWindow,0,WS_SYSMENU|WS_MINIMIZEBOX,0);
+	ModifyStyle(renderWindow,0,WS_MINIMIZEBOX,0);
 }
 void TransparentWnd::CreateBrowserWindowBase(CefString path, UINT ex_style, bool isTransparent){
 	TCHAR   szPath[1000];   
