@@ -164,5 +164,5 @@ void InitResScheme() {
 }
 
 void RunResScheme(CefRefPtr<CefBrowser> browser) {
-  browser->GetMainFrame()->LoadURL("res://webtop/logo.png");
+  browser->GetMainFrame()->LoadURL("res://AlloyDesktop/logo.png");
 }

@@ -81,7 +81,7 @@ class ClientFilterHandler : public CefContentFilter {
 		s->WriteBytes((const PBYTE)data,data_size);
 		count+=data_size;
 		std::stringstream ss;
-		ss<<"var e = new CustomEvent('webtopDownload',{"
+		ss<<"var e = new CustomEvent('AlloyDesktopDownload',{"
 			<<"	detail:{"
 			<<"		filename:\""<<filename.ToString()<<"\","
 			<<"		count:"<<count<<","
@@ -106,7 +106,7 @@ class ClientFilterHandler : public CefContentFilter {
 		ChangeFileSize(filename.ToWString().data(),count);
 	}
 	std::stringstream ss;
-	ss<<"var e = new CustomEvent('webtopDownloadComplete',{"
+	ss<<"var e = new CustomEvent('AlloyDesktopDownloadComplete',{"
 			<<"	detail:{"
 			<<"		filename:\""<<filename.ToString()<<"\","
 			<<"		count:"<<count

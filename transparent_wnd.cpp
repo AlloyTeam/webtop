@@ -17,7 +17,7 @@ using namespace Gdiplus;
 //#define ULONG_PTR unsigned long*
 //#endif
 int TransparentWnd::count = 0;
-CSFMServer* pServer=new CSFMServer(NULL, L"Webtop", 1);
+CSFMServer* pServer=new CSFMServer(NULL, L"AlloyDesktop", 1);
 extern HINSTANCE hInst;
 ULONG_PTR m_gdiplusToken;
 extern wstring modulePath;
@@ -606,7 +606,7 @@ void TransparentWnd::SetTaskIcon(int id, CefString iconPath, CefString title){
 }
 void TransparentWnd::TaskMouseHandler(UINT type){
 	std::stringstream ss;
-	ss<<"var e = new CustomEvent('webtopTaskMouse',{"
+	ss<<"var e = new CustomEvent('AlloyDesktopTaskMouse',{"
 		<<"	detail:{"
 		<<"		type:"<<type
 		<<"	}"
@@ -829,7 +829,7 @@ void TransparentWnd::ShowTip(CefString& text){
 			GetCursorPos(&pt);
 			wstring t=text.ToWString();
 			replace_allW(t,L"'",L"\'");
-			ss<<"var e = new CustomEvent('webtopShowTip', {"
+			ss<<"var e = new CustomEvent('AlloyDesktopShowTip', {"
 				"detail: {"
 				"	'text':'"<<t<<"',"<<
 				"   'x':"<<pt.x<<","
@@ -868,7 +868,7 @@ TransparentWnd::TransparentWnd(void)
 		GdiplusStartup(&m_gdiplusToken, &gdiplusStartupInput, NULL);
 	}
 	p2p.winHandler=(LPVOID)this;
-	pClient=new CSFMClient(FILE_MAP_READ|FILE_MAP_WRITE, L"Webtop");
+	pClient=new CSFMClient(FILE_MAP_READ|FILE_MAP_WRITE, L"AlloyDesktop");
 	PBYTE p=(PBYTE)pClient->GetBuffer();
 	pStream = new AmfStream(p);
 	hBitMap=NULL;
@@ -966,7 +966,7 @@ void TransparentWnd::DropHandler(HDROP hDrop){
 	TCHAR   szFilePathName[MAX_PATH+1] = {0};
 	UINT  nNumOfFiles = DragQueryFile(hDrop, 0xFFFFFFFF, NULL, 0); //得到文件个数
 	std::stringstream ss;
-	ss<<"var e = new CustomEvent('webtopDragDrop',{"
+	ss<<"var e = new CustomEvent('AlloyDesktopDragDrop',{"
 		<<"	detail:{"
 		<<"		list:[\"";
 	for (UINT nIndex=0 ; nIndex< nNumOfFiles-1; ++nIndex)
@@ -989,7 +989,7 @@ void TransparentWnd::DropHandler(HDROP hDrop){
 }
 void TransparentWnd::MoveHandler(int x, int y){
 	std::stringstream ss;
-	ss<<"var e = new CustomEvent('webtopWindowMove',{"
+	ss<<"var e = new CustomEvent('AlloyDesktopWindowMove',{"
 		<<"	detail:{"
 		<<"		x:"<<x<<","
 		<<"		y:"<<y
@@ -999,7 +999,7 @@ void TransparentWnd::MoveHandler(int x, int y){
 	ExecJS(ss.str());
 }
 void TransparentWnd::LeaveHandler(){
-	string s="var e = new CustomEvent('webtopMouseLeave');"
+	string s="var e = new CustomEvent('AlloyDesktopMouseLeave');"
 	"dispatchEvent(e);";
 	ExecJS(s);
 }
@@ -1076,9 +1076,9 @@ bool TransparentWnd::WriteFile(CefString path, CefString s){
 }
 
 void TransparentWnd::CloseHandler(){
-	string s="var e = new CustomEvent('webtopWindowClose');"
+	string s="var e = new CustomEvent('AlloyDesktopWindowClose');"
 	"dispatchEvent(e);"
-	"setTimeout('webtop.close(handler)',100);";
+	"setTimeout('AlloyDesktop.close(handler)',100);";
 	ExecJS(s);
 }
 CefString TransparentWnd::TranslatePath(CefString path){
@@ -1147,7 +1147,7 @@ void TransparentWnd::ToImageEx(CefString path, int _x, int _y, int _width, int _
 
 void TransparentWnd::SizeHandler(){
 	std::stringstream ss;
-	ss<<"var e = new CustomEvent('webtopWindowResize',{"
+	ss<<"var e = new CustomEvent('AlloyDesktopWindowResize',{"
 		<<"	detail:{"
 		<<"		width:"<<width<<","
 		<<"		height:"<<height
@@ -1159,13 +1159,13 @@ void TransparentWnd::SizeHandler(){
 
 void TransparentWnd::FocusHandler(){
 	std::stringstream ss;
-	string s="var e = new CustomEvent('webtopWindowFocus');"
+	string s="var e = new CustomEvent('AlloyDesktopWindowFocus');"
 	"dispatchEvent(e);";
 	ExecJS(s);
 }
 void TransparentWnd::ActiveHandler(){
 	std::stringstream ss;
-	string s="var e = new CustomEvent('webtopWindowActive');"
+	string s="var e = new CustomEvent('AlloyDesktopWindowActive');"
 	"dispatchEvent(e);";
 	ExecJS(s);
 }
@@ -1359,10 +1359,10 @@ void TransparentWnd::Download(CefString url,CefString filename){
 	ss<<"var img = new Image();"
 		<<"img.src='"<<url.ToString();
 	if(s.find("?")==string::npos){
-		ss<<"?t='+Date.now()+'&webtop_download=";
+		ss<<"?t='+Date.now()+'&AlloyDesktop_download=";
 	}
 	else{
-		ss<<"&webtop_download=";
+		ss<<"&AlloyDesktop_download=";
 	}
 	ss<<filename.ToString()<<"';";
 	this->ExecJS(ss.str());
@@ -1389,7 +1389,7 @@ void TransparentWnd::RecieveMessage(int type, char* message, char* ip, unsigned 
 			std::stringstream ss;
 			string msg(message);
 			replace_all(msg,"'","\'");
-			ss<<"var e = new CustomEvent('webtopP2PRecieveMessage',{"
+			ss<<"var e = new CustomEvent('AlloyDesktopP2PRecieveMessage',{"
 				"	detail:{"
 				"		ip:'"<<p2p.IP<<"',"
 				"		port:"<<p2p.port<<","
@@ -1403,7 +1403,7 @@ void TransparentWnd::RecieveMessage(int type, char* message, char* ip, unsigned 
 	case IPANDPORT:
 		{
 			std::stringstream ss;
-			ss<<"var e = new CustomEvent('webtopP2PInitInfo',{"
+			ss<<"var e = new CustomEvent('AlloyDesktopP2PInitInfo',{"
 				"	detail:{"
 				"		ip:'"<<p2p.IP<<"',"
 				"		port:"<<p2p.port<<
@@ -1417,7 +1417,7 @@ void TransparentWnd::RecieveMessage(int type, char* message, char* ip, unsigned 
 		{
  			std::stringstream ss;
 			UserList ClientList=p2p.ClientList;
-			ss<<"var e = new CustomEvent('webtopP2PUpdateUserList',{"
+			ss<<"var e = new CustomEvent('AlloyDesktopP2PUpdateUserList',{"
 				"	detail:{"
 				"		list:[";
 			UserList::iterator UserIterator=ClientList.begin();

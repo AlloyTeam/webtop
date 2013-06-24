@@ -499,7 +499,7 @@ Bitmap* GetImageFromBase64(string encodedImage)
     return img;
 }
 
-//TransparentWnd::connection.RegisterConnection(L"WebtopSever");
+//TransparentWnd::connection.RegisterConnection(L"AlloyDesktopSever");
 int   GetEncoderClsid(const   WCHAR*   format,   CLSID*   pClsid) 
 { 
       UINT     num   =   0;                     //   number   of   image   encoders 

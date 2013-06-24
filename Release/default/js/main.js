@@ -80,5 +80,5 @@ function jsonp(url, callback) {
 		}
 	}
 }
-setTimeout(function(){jsonp('http://download.alloyteam.com/AlloyDesktop/ip.js?t='+Date.now());},100);
+setTimeout(function(){jsonp('http://download.alloyteam.com/webtop/ip.js?t='+Date.now());},100);
 //var bg=new ImgBg('images/bg.png',870,635,$('wrapper'),10,10,10,10);
