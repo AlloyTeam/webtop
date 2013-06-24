@@ -4,4 +4,4 @@ node.innerHTML='官方群：257960168，欢迎交流讨论。2012.10.31：修复
 wrapper.appendChild(node);
 var o=document.querySelector(".info");
 var link=o.getElementsByTagName('a')[1];
-link.href="http://download.alloyteam.com/webtop.zip?t=20121031001";
+link.href="http://download.alloyteam.com/AlloyDesktop.zip?t=20121031001";

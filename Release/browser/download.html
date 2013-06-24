@@ -13,10 +13,10 @@
 </div>
 <script>
 closeBtn.onclick=function(){
-	webtop.closeHandler();
+	AlloyDesktop.closeHandler();
 }
 miniBtn.onclick=function(){
-	webtop.mini();
+	AlloyDesktop.mini();
 }
 var contentLength=-1;
 var byteCount=0;
@@ -35,7 +35,7 @@ var setProgress=function(size){
 	}
 }
 devBtn.onclick=function(){
-	webtop.showDev();
+	AlloyDesktop.showDev();
 }
 var complete=function(){
 	title.innerHTML='下载完成';
@@ -51,27 +51,27 @@ var i=0;
 var id=setInterval(function(){++i;progressAni.style.left=i+'px';if(i>=130){i=5;}},10);
 window.onload=function(){
 	setTimeout(function(){
-		webtop.move(300,300);
-		webtop.setSize(230,100);
-		webtop.ready();
-		setTimeout(function(){if(window['parentWindow'])webtop.close(parentWindow);},0);
-            //setTimeout(function () { webtop.close(parentWindow); }, 0);
+		AlloyDesktop.move(300,300);
+		AlloyDesktop.setSize(230,100);
+		AlloyDesktop.ready();
+		setTimeout(function(){if(window['parentWindow'])AlloyDesktop.close(parentWindow);},0);
+            //setTimeout(function () { AlloyDesktop.close(parentWindow); }, 0);
 	},100);
 }
-webtop.closeHandler=function(){
-	webtop.close();
+AlloyDesktop.closeHandler=function(){
+	AlloyDesktop.close();
 }
 header.onmousedown=function(){
-	webtop.drag();
+	AlloyDesktop.drag();
 }
 header.onmouseup=function(){
-	webtop.stopDrag();
+	AlloyDesktop.stopDrag();
 
 }
 var sizeHandler=function(){
 	container.style.height=e.detail.height-12+'px';
 }
-addEventListener('webtopWindowResize',sizeHandler);
+addEventListener('AlloyDesktopWindowResize',sizeHandler);
 </script>
 </body>
 </html>

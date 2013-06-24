@@ -426,11 +426,11 @@ time.onclick=function(){
 	return false;
 }
 var readyHandler=function(){
-	webtop.move(100,100);
-	webtop.setSize(270,80);
-	setTimeout('webtop.toImage("screen.png")',2000);
+	AlloyDesktop.move(100,100);
+	AlloyDesktop.setSize(270,80);
+	setTimeout('AlloyDesktop.toImage("screen.png")',2000);
 }
-addEventListener("webtopReady",readyHandler);
+addEventListener("AlloyDesktopReady",readyHandler);
 closeBtn.onclick=function(){
-	webtop.close();
+	AlloyDesktop.close();
 }

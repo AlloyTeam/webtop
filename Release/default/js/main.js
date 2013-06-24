@@ -3,31 +3,31 @@ function $(id){
 	return document.getElementById(id);
 }
 closeBtn.onclick=function(){
-	webtop.close()
+	AlloyDesktop.close()
 }
 demo1.onclick=function(){
-	webtop.runAppEx("../browser/index.app",'http://www.alloyteam.com');
+	AlloyDesktop.runAppEx("../browser/index.app",'http://www.alloyteam.com');
 }
 demo2.onclick=function(){
-	webtop.runAppEx("../demo/music/index.app");
+	AlloyDesktop.runAppEx("../demo/music/index.app");
 }
 demo3.onclick=function(){
-	webtop.runApp("../demo/ruler/index.app");
+	AlloyDesktop.runApp("../demo/ruler/index.app");
 }
 demo4.onclick=function(){
-	webtop.runAppEx("app/codetank.app");
+	AlloyDesktop.runAppEx("app/codetank.app");
 }
 demo5.onclick=function(){
-	webtop.runAppEx("app/fighter.app");
+	AlloyDesktop.runAppEx("app/fighter.app");
 }
 var readyHandler=function(){
-	var size=webtop.getScreenSize();
+	var size=AlloyDesktop.getScreenSize();
 	var x=Math.floor((size.width-829)/2);
 	var y=Math.floor((size.height-635)/2);
-	webtop.setSize(880,650);
-	webtop.move(x,y);
-	//webtop.connect('192.168.0.102','melody');
-	setTimeout("webtop.toImage('screen.png');",0);
+	AlloyDesktop.setSize(880,650);
+	AlloyDesktop.move(x,y);
+	//AlloyDesktop.connect('192.168.0.102','melody');
+	setTimeout("AlloyDesktop.toImage('screen.png');",0);
 }
 var messageHandler=function(e){
 	var o=e.detail;
@@ -40,10 +40,10 @@ var p2pInitHandler=function(e){
 var p2pUserListHandler=function(e){
 	console.log(e.detail);
 }
-addEventListener("webtopReady",readyHandler);
-addEventListener("webtopP2PRecieveMessage",messageHandler);
-addEventListener("webtopP2PInitInfo",p2pInitHandler);
-addEventListener("webtopP2PUpdateUserList",p2pInitHandler);
+addEventListener("AlloyDesktopReady",readyHandler);
+addEventListener("AlloyDesktopP2PRecieveMessage",messageHandler);
+addEventListener("AlloyDesktopP2PInitInfo",p2pInitHandler);
+addEventListener("AlloyDesktopP2PUpdateUserList",p2pInitHandler);
 function dockImages(oWrap){
 	var aImg=oWrap.getElementsByTagName('img');
 	var rect=oWrap.getBoundingClientRect();
@@ -80,5 +80,5 @@ function jsonp(url, callback) {
 		}
 	}
 }
-setTimeout(function(){jsonp('http://download.alloyteam.com/webtop/ip.js?t='+Date.now());},100);
+setTimeout(function(){jsonp('http://download.alloyteam.com/AlloyDesktop/ip.js?t='+Date.now());},100);
 //var bg=new ImgBg('images/bg.png',870,635,$('wrapper'),10,10,10,10);

@@ -49,29 +49,29 @@ function getArg(sArgName)
 }
 var id;
 function init(){
-	//id=setTimeout('webtop.close()',1500);
+	//id=setTimeout('AlloyDesktop.close()',1500);
 	tip.innerHTML=o.text;
-	webtop.move(o.x,o.y+15);
-	webtop.setSize(tip.clientWidth+20,tip.offsetHeight+20);
-	addEventListener("webtopShowTip",tipHandler);
+	AlloyDesktop.move(o.x,o.y+15);
+	AlloyDesktop.setSize(tip.clientWidth+20,tip.offsetHeight+20);
+	addEventListener("AlloyDesktopShowTip",tipHandler);
 }
 document.onmouseover=function(){
 	//clearInterval(id);
 }
 document.onmouseout=function(){
-	//id=setTimeout('webtop.close()',1500);
+	//id=setTimeout('AlloyDesktop.close()',1500);
 }
 var tipHandler=function(e){
 	var o=e.detail;
 	tip.innerHTML=o.text;
-	webtop.move(o.x-20,o.y+15);
-	webtop.setSize(tip.clientWidth+20,tip.offsetHeight+20);
+	AlloyDesktop.move(o.x-20,o.y+15);
+	AlloyDesktop.setSize(tip.clientWidth+20,tip.offsetHeight+20);
 }
 var param,o;
 if(param=getArg('param')){
 	o=JSON.parse(param);
 }
-addEventListener("webtopReady",init);
+addEventListener("AlloyDesktopReady",init);
 </script>
 </body>
 </html>

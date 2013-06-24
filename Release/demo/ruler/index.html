@@ -153,8 +153,8 @@ html,body{
 r.onclick=function(){
 	if(container.className=='container'){
 		container.className='container1';
-		if(window['webtop']!=undefined){
-			//webtop.setSize(100,1001);
+		if(window['AlloyDesktop']!=undefined){
+			//AlloyDesktop.setSize(100,1001);
 		}
 		r.className='r1';
 		var ns=nc.getElementsByTagName('div');
@@ -168,8 +168,8 @@ r.onclick=function(){
 	}
 	else{
 		container.className='container';
-		if(window['webtop']!=undefined){
-			//webtop.setSize(1001,100);
+		if(window['AlloyDesktop']!=undefined){
+			//AlloyDesktop.setSize(1001,100);
 		}
 		var ns=nc.getElementsByTagName('div');
 		for(var i=0;i<ns.length;++i){
@@ -183,10 +183,10 @@ r.onclick=function(){
 	}
 }
 closeBtn.onclick=function(){
-	webtop.close();
+	AlloyDesktop.close();
 }
 miniBtn.onclick=function(){
-	webtop.mini();
+	AlloyDesktop.mini();
 }
 function createN(){
 	var s=[];
@@ -198,19 +198,19 @@ function createN(){
 	nc.innerHTML=s.join('');
 }
 document.onkeydown = function(k) {
-	var pos=webtop.getPos();
+	var pos=AlloyDesktop.getPos();
 	switch (k.keyCode) {
 		case 37:
-			webtop.move(pos.x-1,pos.y);
+			AlloyDesktop.move(pos.x-1,pos.y);
 			break;
 		case 38:
-			webtop.move(pos.x,pos.y-1);
+			AlloyDesktop.move(pos.x,pos.y-1);
 			break;
 		case 39:
-			webtop.move(pos.x+1,pos.y);
+			AlloyDesktop.move(pos.x+1,pos.y);
 			break;
 		case 40:
-			webtop.move(pos.x,pos.y+1);
+			AlloyDesktop.move(pos.x,pos.y+1);
 	}
 }
 var rotation=0;
@@ -239,20 +239,20 @@ document.onselectstart=function(){
 }
 createN();
 var readyHandler=function(){
-	webtop.setTopMost();
-	setTimeout('webtop.toImageEx("screen.png",3,453,1001,100)',0);
+	AlloyDesktop.setTopMost();
+	setTimeout('AlloyDesktop.toImageEx("screen.png",3,453,1001,100)',0);
 }
-addEventListener("webtopReady",readyHandler);
+addEventListener("AlloyDesktopReady",readyHandler);
 var rotating=false;
 rotateBtn.onmousedown=function(){
 	rotating=true;
 	wraper.style.background='rgba(0,0,0,0.005)';
 }
 dragEl.onmousedown=function(){
-	webtop.drag();
+	AlloyDesktop.drag();
 }
 dragEl.onmouseup=function(){
-	webtop.stopDrag();
+	AlloyDesktop.stopDrag();
 }
 resetBtn.onclick=function(){
 	rotation = 0;

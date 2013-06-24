@@ -277,7 +277,18 @@
     <None Include="cefclient\res\logo.png" />
     <None Include="cefclient\res\uiplugin.html" />
     <None Include="include\internal\npapi\README-TRANSFER.txt" />
+    <None Include="Release\browser\default.html" />
+    <None Include="Release\browser\download.html" />
+    <None Include="Release\browser\index.html" />
+    <None Include="Release\default\index.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Release\demo\music\index.html" />
+    <None Include="Release\demo\ruler\index.html" />
+    <None Include="Release\demo\tip\index.html" />
     <None Include="Release\ip.js" />
+    <None Include="Release\tip\index.html" />
+    <None Include="Release\window\index.html" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AmfStream.h" />
@@ -420,6 +431,9 @@
       <Project>{A9D6DC71-C0DC-4549-AEA0-3B15B44E86A9}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="Release\obj\air browser\air browser.exe.intermediate.manifest" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

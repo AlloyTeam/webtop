@@ -51,17 +51,17 @@ function getArg(sArgName)
 }
 var id;
 var readyHandler=function(){
-	id=setTimeout('webtop.close()',1500);
+	id=setTimeout('AlloyDesktop.close()',1500);
 	tip.innerHTML=o.tip;
-	webtop.move(o.x,o.y);
-	webtop.setSize(tip.clientWidth+20,tip.offsetHeight+20);
+	AlloyDesktop.move(o.x,o.y);
+	AlloyDesktop.setSize(tip.clientWidth+20,tip.offsetHeight+20);
 }
-addEventListener("webtopReady",readyHandler);
+addEventListener("AlloyDesktopReady",readyHandler);
 document.onmouseover=function(){
 	clearInterval(id);
 }
 document.onmouseout=function(){
-	id=setTimeout('webtop.close()',1500);
+	id=setTimeout('AlloyDesktop.close()',1500);
 }
 var param,o;
 if(param=getArg('param')){

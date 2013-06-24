@@ -392,6 +392,15 @@
       <Filter>cefclient</Filter>
     </None>
     <None Include="Release\ip.js" />
+    <None Include="Release\browser\default.html" />
+    <None Include="Release\browser\download.html" />
+    <None Include="Release\browser\index.html" />
+    <None Include="Release\default\index.htm" />
+    <None Include="Release\demo\music\index.html" />
+    <None Include="Release\demo\ruler\index.html" />
+    <None Include="Release\demo\tip\index.html" />
+    <None Include="Release\tip\index.html" />
+    <None Include="Release\window\index.html" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="cef">
@@ -405,5 +414,8 @@
     <ResourceCompile Include="cefclient\cefclient.rc">
       <Filter>cef</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="Release\obj\air browser\air browser.exe.intermediate.manifest" />
   </ItemGroup>
 </Project>

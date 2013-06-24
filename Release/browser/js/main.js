@@ -32,10 +32,10 @@ document.onselectstart=function(){
 }
 var showDevHandler=function(){
 	if(!browserWindow){
-		webtop.showDev();
+		AlloyDesktop.showDev();
 	}
 	else{
-		webtop.showDev(browserWindow);
+		AlloyDesktop.showDev(browserWindow);
 	}
 
 }
@@ -54,75 +54,75 @@ transparentBtn.onclick=function(){
 	switchMode();
 }
 miniBtn.onclick=function(){
-	webtop.mini();
+	AlloyDesktop.mini();
 	if(browserWindow){
-		webtop.mini(browserWindow);
+		AlloyDesktop.mini(browserWindow);
 	}
 }
 header.onmousedown=function(){
-	webtop.drag();
+	AlloyDesktop.drag();
 }
 header.onmouseup=function(){
-	webtop.stopDrag();
+	AlloyDesktop.stopDrag();
 }
 var sizeHandler=function(e){
 	console.log(e);
 	var w=e.detail.width,h=e.detail.height;
 	container.style.height=h-12+'px';
 	if(browserWindow){
-		webtop.setSize(w-30, h-85, browserWindow);
+		AlloyDesktop.setSize(w-30, h-85, browserWindow);
 	}
 	width=w;
 	height=h;
 }
 var moveHandler=function(e){
 	if(browserWindow){
-		webtop.move(e.detail.x+15,e.detail.y+70,browserWindow);
+		AlloyDesktop.move(e.detail.x+15,e.detail.y+70,browserWindow);
 	}
 }
 var closeHandler=function(){
-	webtop.close(browserWindow);
-	webtop.close();
+	AlloyDesktop.close(browserWindow);
+	AlloyDesktop.close();
 }
 var focusHandler=function(){
 	if(browserWindow){
-		webtop.bringToTop(browserWindow);
-		webtop.restore(browserWindow);
-		//webtop.focus(browserWindow);
+		AlloyDesktop.bringToTop(browserWindow);
+		AlloyDesktop.restore(browserWindow);
+		//AlloyDesktop.focus(browserWindow);
 	}
 }
 var activeHandler=function(){
-	webtop.focus(browserWindow);
+	AlloyDesktop.focus(browserWindow);
 }
 var dropHandler=function(e){
 	var fileList=e.detail.list;
-	webtop.loadUrlIn(fileList[0]);
+	AlloyDesktop.loadUrlIn(fileList[0]);
 	for(var i=1;i<fileList.length;++i){
-		webtop.browse(fileList[i]);
+		AlloyDesktop.browse(fileList[i]);
 	}
 	console.log(e.detail);
 }
-webtop.loadUrlIn=function(_url){
+AlloyDesktop.loadUrlIn=function(_url){
 	if(!browserWindow){
 		newPage(_url);
 	}
-	webtop.loadUrl(_url,browserWindow);
+	AlloyDesktop.loadUrl(_url,browserWindow);
 	url=_url;		
 }
 var browserWindow;
 function newPage(url,transparent,isBase){
 	if(browserWindow){
-		webtop.close(browserWindow);
+		AlloyDesktop.close(browserWindow);
 	}
 	if(isBase){
-		browserWindow=webtop.createWindowBase(url,WS_EX_TOOLWINDOW,transparent,"var parentWindow="+handler);
+		browserWindow=AlloyDesktop.createWindowBase(url,WS_EX_TOOLWINDOW,transparent,"var parentWindow="+handler);
 	}
 	else{
-		browserWindow=webtop.createWindow(url,WS_EX_TOOLWINDOW,transparent,"var parentWindow="+handler);
+		browserWindow=AlloyDesktop.createWindow(url,WS_EX_TOOLWINDOW,transparent,"var parentWindow="+handler);
 	}
-	var pos=webtop.getPos();
-	webtop.move(pos.x+15,pos.y+70,browserWindow);
-	webtop.setSize(width-30, height-85, browserWindow);
+	var pos=AlloyDesktop.getPos();
+	AlloyDesktop.move(pos.x+15,pos.y+70,browserWindow);
+	AlloyDesktop.setSize(width-30, height-85, browserWindow);
 }
 var $=function(id){
 	return document.getElementById(id);
@@ -134,8 +134,8 @@ $('lst-ib').onkeyup=function(e){
 			switchMode();
 			isDefault=false;
 		}*/
-		webtop.loadUrlIn($('lst-ib').value);
-		webtop.focus(browserWindow);
+		AlloyDesktop.loadUrlIn($('lst-ib').value);
+		AlloyDesktop.focus(browserWindow);
 		//newPage($('lst-ib').value);
 	}
 }
@@ -163,21 +163,21 @@ makeBtn.onclick=function(){
 		}
 		path=url.substring(index1+1,index)+'.app';
 		path.replace(/\//g,'');
-		path=webtop.getSaveName( path);
+		path=AlloyDesktop.getSaveName( path);
 	}
 	s+='\nwidth=800\nheight=600\nenableDrag=1';
-	webtop.writeFile(path,s);
+	AlloyDesktop.writeFile(path,s);
 }
 var readyHandler=function(){
-	webtop.move(0,0);
-	webtop.max();
-	setTimeout("webtop.toImage('screen.png');",1000);
+	AlloyDesktop.move(0,0);
+	AlloyDesktop.max();
+	setTimeout("AlloyDesktop.toImage('screen.png');",1000);
 	var href=location.href;
 	var index=href.indexOf('=');
 	if(index!=-1){
 		var param=href.substr(index+1);//getArg('param');
 		if(param){
-			webtop.loadUrlIn(param)
+			AlloyDesktop.loadUrlIn(param)
 		}
 	}
 	/*else{
@@ -191,21 +191,21 @@ var readyHandler=function(){
 }
 var refreshHandler=function(){
 	if(browserWindow){
-		webtop.reloadIgnoreCache(browserWindow);
+		AlloyDesktop.reloadIgnoreCache(browserWindow);
 	}
 	else{
-		webtop.reloadIgnoreCache();
+		AlloyDesktop.reloadIgnoreCache();
 	}
 }
-addEventListener("webtopReady",readyHandler);
-addEventListener("webtopWindowResize",sizeHandler);
-addEventListener("webtopWindowMove",moveHandler);7
-addEventListener("webtopDragDrop",dropHandler);
-addEventListener("webtopWindowActive",activeHandler);
-addEventListener("webtopWindowFocus",focusHandler);
-addEventListener("webtopRefresh",refreshHandler);
-addEventListener("webtopShowDev",showDevHandler);
-addEventListener("webtopWindowClose",closeHandler);
+addEventListener("AlloyDesktopReady",readyHandler);
+addEventListener("AlloyDesktopWindowResize",sizeHandler);
+addEventListener("AlloyDesktopWindowMove",moveHandler);7
+addEventListener("AlloyDesktopDragDrop",dropHandler);
+addEventListener("AlloyDesktopWindowActive",activeHandler);
+addEventListener("AlloyDesktopWindowFocus",focusHandler);
+addEventListener("AlloyDesktopRefresh",refreshHandler);
+addEventListener("AlloyDesktopShowDev",showDevHandler);
+addEventListener("AlloyDesktopWindowClose",closeHandler);
 refreshBtn.onclick=function(){
 	refreshHandler()
 }
