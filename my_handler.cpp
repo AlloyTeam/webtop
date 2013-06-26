@@ -1067,6 +1067,19 @@ bool MyHandler::Execute(const CefString& name,
 		retval->SetValue("port", CefV8Value::CreateInt(port),V8_PROPERTY_ATTRIBUTE_NONE);
 		return true;
 	}
+	else if(name=="shellExecute"){
+		CefString operation=arguments[1]->GetStringValue();
+		CefString path=arguments[2]->GetStringValue();
+		CefString params=arguments[3]->GetStringValue();
+		CefString directory=arguments[4]->GetStringValue();
+		int showCmd = static_cast<int>(arguments[5]->GetIntValue());
+		ShellExecute(NULL,operation.ToWString().data(),path.ToWString().data(),params.ToWString().data(),directory.ToWString().data(),showCmd);
+	}
+	else if(name=="winExec"){
+		CefString cmd=arguments[1]->GetStringValue();
+		int showCmd = static_cast<int>(arguments[2]->GetIntValue());
+		WinExec(cmd.ToString().data(),showCmd);
+	}
 	return false;
 }
 
@@ -1491,6 +1504,16 @@ void InitCallback()
 	"    handler=handler?handler:window['handler'];"
     "    native function getScreenSize(handler);"
 	"    return getScreenSize(handler);"
+    "  };"
+    "  AlloyDesktop.shellExecute = function(operation,path,params,directory,cmdShow,handler) {"
+	"    handler=handler?handler:window['handler'];"
+    "    native function shellExecute(handler,operation,path,params,directory,cmdShow);"
+	"    return shellExecute(handler,operation,path,params,directory,cmdShow);"
+    "  };"
+    "  AlloyDesktop.winExec = function(cmd,cmdShow,handler) {"
+	"    handler=handler?handler:window['handler'];"
+    "    native function winExec(handler,cmd,cmdShow);"
+	"    return winExec(handler,cmd,cmdShow);"
     "  };"
 	"})();";
 	CefRegisterExtension("callback/test", code, new MyHandler());
