@@ -1080,6 +1080,10 @@ bool MyHandler::Execute(const CefString& name,
 		int showCmd = static_cast<int>(arguments[2]->GetIntValue());
 		WinExec(cmd.ToString().data(),showCmd);
 	}
+	else if(name=="execJS"){
+		CefString js=arguments[1]->GetStringValue();
+		winHandler->ExecJS(js);
+	}
 	return false;
 }
 
@@ -1514,6 +1518,11 @@ void InitCallback()
 	"    handler=handler?handler:window['handler'];"
     "    native function winExec(handler,cmd,cmdShow);"
 	"    return winExec(handler,cmd,cmdShow);"
+    "  };"
+    "  AlloyDesktop.execJS = function(js,handler) {"
+	"    handler=handler?handler:window['handler'];"
+    "    native function execJS(handler,js);"
+	"    return execJS(handler,js);"
     "  };"
 	"})();";
 	CefRegisterExtension("callback/test", code, new MyHandler());
