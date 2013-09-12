@@ -257,9 +257,10 @@ void MyHandler::OnResourceResponse(CefRefPtr<CefBrowser> browser,
                                   CefRefPtr<CefResponse> response,
                                   CefRefPtr<CefContentFilter>& filter) {
 	string s=url.ToString();
-	if(s.find("AlloyDesktop_download=")!=string::npos){
-		int index1=s.find("AlloyDesktop_download=");
-		s=s.substr(index1+16);
+	string s1="AlloyDesktop_download=";
+	if(s.find(s1)!=string::npos){
+		int index1=s.find(s1);
+		s=s.substr(index1+s1.length());
 		ClientFilterHandler * myfilter=new ClientFilterHandler();
 		myfilter->SetWinHandler((void *)this->win,s,contentLength);
 		filter=myfilter;
@@ -1082,7 +1083,12 @@ bool MyHandler::Execute(const CefString& name,
 	}
 	else if(name=="execJS"){
 		CefString js=arguments[1]->GetStringValue();
-		winHandler->ExecJS(js);
+		try{
+			winHandler->ExecJS(js);
+		}
+		catch(Exception e){
+			e;
+		}
 	}
 	return false;
 }

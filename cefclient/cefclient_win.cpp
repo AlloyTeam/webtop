@@ -71,6 +71,19 @@ void GetModulePath(){
 	path=path.substr(0,path.find_last_of('\\')+1);
 	modulePath=path;
 }
+
+LONG ApplicationCrashHandler(EXCEPTION_POINTERS *pException)  
+{     
+    // 在这里添加处理程序崩溃情况的代码  
+    // 现在很多软件都是弹出一个发送错误报告的对话框  
+  
+    // 这里以弹出一个错误对话框并退出程序为例子  
+    //  
+    //FatalAppExit(-1,  _T("*** Unhandled Exception! ***"));  
+  
+    return EXCEPTION_EXECUTE_HANDLER;  
+}
+
 // Program entry point function.
 int APIENTRY wWinMain(HINSTANCE hInstance,
 	HINSTANCE hPrevInstance,
@@ -79,7 +92,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 {
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
-
+	SetUnhandledExceptionFilter((LPTOP_LEVEL_EXCEPTION_FILTER)ApplicationCrashHandler);
 	// Retrieve the current working directory.
 	if(_getcwd(szWorkingDir, MAX_PATH) == NULL)
 		szWorkingDir[0] = 0;
