@@ -128,10 +128,15 @@ var readyHandler=function(){
 		AlloyDesktop.setSize(getArg('width'),getArg('height'));
 	}
 }
+var closeHandler = function () {
+    AlloyDesktop.close(browserWindow);
+    AlloyDesktop.close();
+}
 addEventListener("AlloyDesktopReady",readyHandler);
 addEventListener("AlloyDesktopWindowResize",sizeHandler);
 addEventListener("AlloyDesktopWindowMove",moveHandler);
 addEventListener("AlloyDesktopDragDrop",dropHandler);
 addEventListener("AlloyDesktopWindowActive",activeHandler);
 addEventListener("AlloyDesktopWindowFocus",focusHandler);
-title.innerHTML=getArg('name');
+addEventListener("AlloyDesktopWindowClose", closeHandler);
+title.innerHTML = getArg('name');
