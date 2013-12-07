@@ -1,0 +1,69 @@
+﻿<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style>
+        body
+        {
+            background: #fff;
+        }
+        #js
+        {
+            -webkit-user-modify: read-write-plaintext-only;
+            -webkit-user-select: text;
+            border: 1px solid #f1f1f1;
+            display: block;
+            padding: 5px;
+            font-size: 12px;
+        }
+        #header
+        {
+            height: 30px;
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+    <div id="header">
+    </div>
+    <div id="js">
+    </div>
+    <div id="log">
+    </div>
+    <script>
+        var $ = function (id) { return document.getElementById(id); };
+        var server;
+        var proxy;
+        var A=AlloyDesktop;
+        addEventListener("AlloyDesktopReady", function () {
+            server = AlloyDesktop.createTcpServer();
+            proxy = AlloyDestktop.startProxy(8888);
+            //AlloyDesktop.move(0, 0);
+            //AlloyDesktop.max();
+            header.innerHTML = "请连接server" + A.getIP() + ":2280";
+        });
+        addEventListener("AlloyDesktopRecieveTCPMessage",
+         function (e) {
+             log.innerText += e.detail.message + "\n";
+             parseResponse(e.detail.message);
+         });
+         addEventListener("AlloyDesktopRecieveRequest",
+         function (e) {
+             log.innerText += e.detail.message + "\n";
+         });
+         $('js').onkeypress = function (e) {
+            if (e.keyCode == 13) {
+                AlloyDesktop.sendTcpMsg(server, $('js').innerHTML);
+                js.innerHTML = "";
+            }
+        }
+        header.onmousedown = function () {
+            AlloyDesktop.drag();
+        }
+        header.onmouseup = function () {
+            AlloyDesktop.stopDrag();
+        }
+        function parseResponse() {
+        }
+    </script>
+</body>
+</html>

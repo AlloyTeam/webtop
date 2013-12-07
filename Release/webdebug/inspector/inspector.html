@@ -1,0 +1,480 @@
+﻿<!--
+Copyright (C) 2006, 2007, 2008 Apple Inc.  All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+
+1.  Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+2.  Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in the
+    documentation and/or other materials provided with the distribution.
+3.  Neither the name of Apple Computer, Inc. ("Apple") nor the names of
+    its contributors may be used to endorse or promote products derived
+    from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY APPLE AND ITS CONTRIBUTORS "AS IS" AND ANY
+EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL APPLE OR ITS CONTRIBUTORS BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" type="text/css" href="audits.css">
+    <link rel="stylesheet" type="text/css" href="goToLineDialog.css">
+    <link rel="stylesheet" type="text/css" href="heapProfiler.css">
+    <link rel="stylesheet" type="text/css" href="inspector.css">
+    <link rel="stylesheet" type="text/css" href="inspectorSyntaxHighlight.css">
+    <link rel="stylesheet" type="text/css" href="networkPanel.css">
+    <link rel="stylesheet" type="text/css" href="helpScreen.css">
+    <link rel="stylesheet" type="text/css" href="popover.css">
+    <link rel="stylesheet" type="text/css" href="textViewer.css">
+    <script type="text/javascript" src="utilities.js"></script>
+    <script type="text/javascript" src="BinarySearch.js"></script>
+    <script type="text/javascript" src="treeoutline.js"></script>
+    <script type="text/javascript" src="inspector.js"></script>
+    <script type="text/javascript" src="InspectorBackendStub.js"></script>
+    <script type="text/javascript" src="InspectorFrontendHostStub.js"></script>
+    <script type="text/javascript" src="ExtensionRegistryStub.js"></script>
+    <script type="text/javascript" src="Object.js"></script>
+    <script type="text/javascript" src="Settings.js"></script>
+    <script type="text/javascript" src="Checkbox.js"></script>
+    <script type="text/javascript" src="ContextMenu.js"></script>
+    <script type="text/javascript" src="KeyboardShortcut.js"></script>
+    <script type="text/javascript" src="TextPrompt.js"></script>
+    <script type="text/javascript" src="Popover.js"></script>
+    <script type="text/javascript" src="TabbedPane.js"></script>
+    <script type="text/javascript" src="Placard.js"></script>
+    <script type="text/javascript" src="PleaseWaitMessage.js"></script>
+    <script type="text/javascript" src="View.js"></script>
+    <script type="text/javascript" src="Drawer.js"></script>
+    <script type="text/javascript" src="ConsoleView.js"></script>
+    <script type="text/javascript" src="Panel.js"></script>
+    <script type="text/javascript" src="TimelineGrid.js"></script>
+    <script type="text/javascript" src="Resource.js"></script>
+    <script type="text/javascript" src="CSSStyleModel.js"></script>
+    <script type="text/javascript" src="NetworkManager.js"></script>
+    <script type="text/javascript" src="ResourceTreeModel.js"></script>
+    <script type="text/javascript" src="ResourceCategory.js"></script>
+    <script type="text/javascript" src="Database.js"></script>
+    <script type="text/javascript" src="DOMStorage.js"></script>
+    <script type="text/javascript" src="DOMStorageItemsView.js"></script>
+    <script type="text/javascript" src="DataGrid.js"></script>
+    <script type="text/javascript" src="ShowMoreDataGridNode.js"></script>
+    <script type="text/javascript" src="CookiesTable.js"></script>
+    <script type="text/javascript" src="CookieItemsView.js"></script>
+    <script type="text/javascript" src="ApplicationCacheItemsView.js"></script>
+    <script type="text/javascript" src="Script.js"></script>
+    <script type="text/javascript" src="SidebarPane.js"></script>
+    <script type="text/javascript" src="ElementsTreeOutline.js"></script>
+    <script type="text/javascript" src="SidebarTreeElement.js"></script>
+    <script type="text/javascript" src="Section.js"></script>
+    <script type="text/javascript" src="PropertiesSection.js"></script>
+    <script type="text/javascript" src="RemoteObject.js"></script>
+    <script type="text/javascript" src="ObjectPropertiesSection.js"></script>
+    <script type="text/javascript" src="BreakpointsSidebarPane.js"></script>
+    <script type="text/javascript" src="DOMBreakpointsSidebarPane.js"></script>
+    <script type="text/javascript" src="CallStackSidebarPane.js"></script>
+    <script type="text/javascript" src="ScopeChainSidebarPane.js"></script>
+    <script type="text/javascript" src="WatchExpressionsSidebarPane.js"></script>
+    <script type="text/javascript" src="WorkersSidebarPane.js"></script>
+    <script type="text/javascript" src="MetricsSidebarPane.js"></script>
+    <script type="text/javascript" src="PropertiesSidebarPane.js"></script>
+    <script type="text/javascript" src="EventListenersSidebarPane.js"></script>
+    <script type="text/javascript" src="Color.js"></script>
+    <script type="text/javascript" src="CSSCompletions.js"></script>
+    <script type="text/javascript" src="CSSKeywordCompletions.js"></script>
+    <script type="text/javascript" src="StylesSidebarPane.js"></script>
+    <script type="text/javascript" src="PanelEnablerView.js"></script>
+    <script type="text/javascript" src="WelcomeView.js"></script>
+    <script type="text/javascript" src="StatusBarButton.js"></script>
+    <script type="text/javascript" src="SummaryBar.js"></script>
+    <script type="text/javascript" src="ElementsPanel.js"></script>
+    <script type="text/javascript" src="NetworkPanel.js"></script>
+    <script type="text/javascript" src="InjectedFakeWorker.js"></script>
+    <script type="text/javascript" src="TextViewer.js"></script>
+    <script type="text/javascript" src="SourceFrame.js"></script>
+    <script type="text/javascript" src="ResourceView.js"></script>
+    <script type="text/javascript" src="ScriptsPanel.js"></script>
+    <script type="text/javascript" src="ResourcesPanel.js"></script>
+    <script type="text/javascript" src="ProfilesPanel.js"></script>
+    <script type="text/javascript" src="ConsolePanel.js"></script>
+    <script type="text/javascript" src="ExtensionAPI.js"></script>
+    <script type="text/javascript" src="ExtensionAuditCategory.js"></script>
+    <script type="text/javascript" src="ExtensionCommon.js"></script>
+    <script type="text/javascript" src="ExtensionServer.js"></script>
+    <script type="text/javascript" src="ExtensionPanel.js"></script>
+    <script type="text/javascript" src="AuditsPanel.js"></script>
+    <script type="text/javascript" src="AuditResultView.js"></script>
+    <script type="text/javascript" src="AuditLauncherView.js"></script>
+    <script type="text/javascript" src="AuditRules.js"></script>
+    <script type="text/javascript" src="AuditCategories.js"></script>
+    <script type="text/javascript" src="AuditFormatters.js"></script>
+    <script type="text/javascript" src="ResourceHeadersView.js"></script>
+    <script type="text/javascript" src="ResourceCookiesView.js"></script>
+    <script type="text/javascript" src="ResourceTimingView.js"></script>
+    <script type="text/javascript" src="ResourceJSONView.js"></script>
+    <script type="text/javascript" src="NetworkItemView.js"></script>
+    <script type="text/javascript" src="ScriptFormatter.js"></script>
+    <script type="text/javascript" src="DOMSyntaxHighlighter.js"></script>
+    <script type="text/javascript" src="TextEditorModel.js"></script>
+    <script type="text/javascript" src="TextEditorHighlighter.js"></script>
+    <script type="text/javascript" src="SourceTokenizer.js"></script>
+    <script type="text/javascript" src="SourceCSSTokenizer.js"></script>
+    <script type="text/javascript" src="SourceHTMLTokenizer.js"></script>
+    <script type="text/javascript" src="SourceJavaScriptTokenizer.js"></script>
+    <script type="text/javascript" src="FontView.js"></script>
+    <script type="text/javascript" src="ImageView.js"></script>
+    <script type="text/javascript" src="DatabaseTableView.js"></script>
+    <script type="text/javascript" src="DatabaseQueryView.js"></script>
+    <script type="text/javascript" src="ProfileDataGridTree.js"></script>
+    <script type="text/javascript" src="BottomUpProfileDataGridTree.js"></script>
+    <script type="text/javascript" src="TopDownProfileDataGridTree.js"></script>
+    <script type="text/javascript" src="ProfileView.js"></script>
+    <script type="text/javascript" src="HeapSnapshot.js"></script>
+    <script type="text/javascript" src="HeapSnapshotProxy.js"></script>
+    <script type="text/javascript" src="HeapSnapshotView.js"></script>
+    <script type="text/javascript" src="HeapSnapshotWorkerDispatcher.js"></script>
+    <script type="text/javascript" src="DetailedHeapshotGridNodes.js"></script>
+    <script type="text/javascript" src="DetailedHeapshotView.js"></script>
+    <script type="text/javascript" src="DebuggerModel.js"></script>
+    <script type="text/javascript" src="DebuggerPresentationModel.js"></script>
+    <script type="text/javascript" src="SourceFile.js"></script>
+    <script type="text/javascript" src="DOMAgent.js"></script>
+    <script type="text/javascript" src="TimelineAgent.js"></script>
+    <script type="text/javascript" src="TimelinePanel.js"></script>
+    <script type="text/javascript" src="TimelineOverviewPane.js"></script>
+    <script type="text/javascript" src="TestController.js"></script>
+    <script type="text/javascript" src="HelpScreen.js"></script>
+    <script type="text/javascript" src="GoToLineDialog.js"></script>
+    <script type="text/javascript" src="ShortcutsHelp.js"></script>
+    <script type="text/javascript" src="HAREntry.js"></script>
+    <script type="text/javascript" src="CookieParser.js"></script>
+    <script type="text/javascript" src="Toolbar.js"></script>
+    <script type="text/javascript" src="SearchController.js"></script>
+    <script type="text/javascript" src="WorkerManager.js"></script>
+    <script type="text/javascript">
+        var server,proxy;
+        var A = AlloyDesktop;
+        var first = true;
+        function replaceResponse(detail, s1, s2){
+            var content = detail.content;
+            console.log("-----------------------------------------------------------------------------------------");
+            content = content.replace("text/html; charset=gb2312", "text/html; charset=utf8");
+            var handler = e.detail.handler;
+            var request = detail.request;
+            var header = detail.header;
+            var reg = new RegExp(s1, "g"); //创建正则RegExp对象
+            content = content.replace(reg, s2);
+            console.log(header);
+            function test($1) {
+                return "Content-Length: " + content.length + "\r\n";
+            }
+            var reg1 = new RegExp("(Content-Length: \d\r\n)", "");
+            header = header.replace(reg1,test);
+            var response1 = header + content;
+            console.log(content);
+            A.replaceResponse(handler, response1);
+        }
+        addEventListener("AlloyDesktopReady", function () {
+            server = AlloyDesktop.createTcpServer();
+            proxy = AlloyDesktop.startProxy(8888);
+            var e = document.createElement('div');
+            e.innerHTML = "<span style=\"margin-left:200px;\">" + "请连接server "
+                + A.getIP() + ":2280" + "</span><span id=\"refreshBtn\" style=\"cursor:pointer;color:blue;margin-left:100px;\">刷新html</span>";
+            header.appendChild(e);
+            WebInspector.currentPanel = WebInspector.panels.console;
+            refreshBtn.onclick = function () {
+                A.sendTcpMsg(server, "getHtml");
+            }
+            header.onmousedown = function () {
+                AlloyDesktop.drag();
+            }
+            header.onmouseup = function () {
+                AlloyDesktop.stopDrag();
+            }
+            closeBtn.onclick = function () {
+                AlloyDesktop.close();
+            }
+            miniBtn.onclick = function () {
+                AlloyDesktop.mini();
+            }
+        });
+        var iframe, doc;
+        var html;
+        addEventListener("AlloyDesktopRecieveRequest",
+         function (e) {
+             WebInspector.console.addMessage(WebInspector.ConsoleMessage.createTextMessage(e.detail.message, WebInspector.ConsoleMessage.MessageLevel.Log));
+         });
+         addEventListener("AlloyDesktopRecieveResponse",
+         function (e) {
+             var detail = e.detail;
+             var header = detail.header;
+             if (header.indexOf('\r\nContent-Type: text\/html') != -1) {
+                 replaceResponse(detail, '</head>', '<script>alert("恭喜你，成功连接测试机器");<\/script><\/head>');
+             }
+             else {
+                 A.cancelReplaceResponse(detail.handler);
+             }
+             //WebInspector.console.addMessage(WebInspector.ConsoleMessage.createTextMessage(detail.request, WebInspector.ConsoleMessage.MessageLevel.Log));
+             //WebInspector.console.addMessage(WebInspector.ConsoleMessage.createTextMessage(detail.header, WebInspector.ConsoleMessage.MessageLevel.Log));
+         });
+         addEventListener("AlloyDesktopRecieveTCPMessage",
+         function (e) {
+             console.log(e);
+             var message = e.detail.message;
+             if (first) {
+                 A.sendTcpMsg(server, "getHtml");
+                 first = false;
+             }
+             if (message.indexOf("dom:") == 0) {
+                 var d = document.createElement("html");
+                 d.innerHTML = message.substr(4);
+                 WebInspector.domAgent._setDocument(d);
+             }
+             else if (message.indexOf("log:") == 0) {
+                 //WebInspector.console.addMessage(WebInspector.ConsoleMessage.createTextMessage(message.substr(7), WebInspector.ConsoleMessage.MessageLevel.Log));
+                 //console.log(eval("(" + message.substr(7) + ")"));
+                 var content = message.substr(4);
+                 WebInspector.console.addMessage(WebInspector.ConsoleMessage.createTextMessage(content, WebInspector.ConsoleMessage.MessageLevel.Log));
+             }
+             else if (message.indexOf("html:") == 0) {
+                 var content = message.substr(5);
+                 var o = eval("(" + content + ")");
+                 var script = new WebInspector.Script("js"+new Date().getTime(), o.url, 0, 0, o.value.split("\n").length, 10000000, 0, 0, true);
+                 script._source = o.value;
+                 WebInspector.panels.scripts._presentationModel._addScript(script);
+                 WebInspector.console.addMessage(WebInspector.ConsoleMessage.createTextMessage("load html:" + o.url,
+                  WebInspector.ConsoleMessage.MessageLevel.Log));
+
+             }
+             else if (message.indexOf("js:") == 0) {
+                 var content = message.substr(3);
+                 var o = eval("(" + content + ")");
+                 var script = new WebInspector.Script("js" + new Date().getTime(), o.url, 0, 0, o.value.split("\n").length, 10000000, 0, 0, false);
+                 script._source = o.value;
+                 WebInspector.panels.scripts._presentationModel._addScript(script);
+                 WebInspector.console.addMessage(WebInspector.ConsoleMessage.createTextMessage("load js:" + o.url,
+                  WebInspector.ConsoleMessage.MessageLevel.Log));
+             }
+             else if (message.indexOf("cmd:") == 0) {
+                 var content = message.substr(4);
+                 if (content == "reset") {
+                     WebInspector.panels.scripts._presentationModel._debuggerReset();
+                 }
+             }
+         });
+    </script>
+    <style type="text/css">
+        body
+        {
+        }
+        #header
+        {
+            background-color: #f1f1f1;
+            height: 30px;
+            font-size: 12px;
+            position: absolute;
+            left: 5px;
+            right: 5px;
+            z-index: 1000;
+            line-height: 30px;
+            top: 5px;
+            box-shadow: 0px 0px 5px 2px rgba(128, 128, 128, 0.5);
+            background: url(images/bar.png);
+            cursor: move;
+        }
+        #container
+        {
+            position: absolute;
+            left: 5px;
+            right: 5px;
+            top: 35px;
+            box-shadow: 0px 0px 5px 2px rgba(128, 128, 128, 0.5);
+            bottom: 5px;
+            background: #f1f1f1;
+        }
+        #closeBtn
+        {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            width: 20px;
+            height: 20px;
+            background: url(images/close.png) no-repeat;
+            background-size: contain;
+            cursor: pointer;
+            opacity: 0.8;
+        }
+        #miniBtn
+        {
+            position: absolute;
+            right: 30px;
+            top: 5px;
+            width: 20px;
+            height: 20px;
+            background: url(images/btn.png) no-repeat;
+            background-size: contain;
+            cursor: pointer;
+            opacity: 0.8;
+        }
+        .select_label
+        {
+            color: #982F4D;
+            float: left;
+            line-height: 24px;
+            padding-right: 10px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+        .select_box
+        {
+            float: left;
+            border: solid 1px #EDE7D6;
+            color: #444;
+            position: relative;
+            cursor: pointer;
+            width: 165px;
+            background: url(../select_bg.jpg) repeat-x;
+            font-size: 12px;
+        }
+        .selet_open
+        {
+            display: inline-block;
+            border-left: solid 1px #E5E5E5;
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 30px;
+            height: 24px;
+            background: url(../select_up.jpg) no-repeat center center;
+        }
+        .select_txt
+        {
+            display: inline-block;
+            padding-left: 10px;
+            width: 150px;
+            line-height: 24px;
+            height: 24px;
+            cursor: text;
+            overflow: hidden;
+        }
+        .option
+        {
+            background: #fff;
+            width: 150px;
+            text-align: center;
+            height: 20px;
+            line-height: 20px;
+            border: solid 1px #ddd;
+            position: relative;
+            top: -1px;
+            left: 0;
+            z-index: 2;
+            overflow: hidden;
+            display: none;
+        }
+        .option a
+        {
+            display: block;
+            height: 26px;
+            line-height: 26px;
+            text-align: left;
+            padding: 0 10px;
+            width: 100%;
+            background: #fff;
+        }
+        .option a:hover
+        {
+            background: #FDE0E5;
+        }
+    </style>
+</head>
+<body class="detached">
+    <div id="header">
+        <div id="closeBtn" title="">
+        </div>
+        <div id="miniBtn">
+        </div>
+    </div>
+    <div id="container">
+        <div id="toolbar">
+            <div class="toolbar-item close-left">
+                <button id="close-button-left">
+                </button>
+            </div>
+            <div id="toolbar-controls">
+                <div class="toolbar-item">
+                    <button id="toolbar-dropdown-arrow" class="toolbar-label">
+                        &raquo;</button></div>
+                <div class="toolbar-item hidden" id="search-results-matches">
+                </div>
+                <div class="toolbar-item toolbar-search-item">
+                    <div id="search" type="search" spellcheck="false">
+                    </div>
+                    <div id="search-toolbar-label" class="toolbar-label">
+                    </div>
+                </div>
+                <div class="toolbar-item close-right">
+                    <button id="close-button-right">
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="main">
+            <div id="main-panels" spellcheck="false">
+            </div>
+            <div id="main-status-bar" class="status-bar">
+                <div id="anchored-status-bar-items">
+                    <button id="dock-status-bar-item" class="status-bar-item">
+                        <div class="glyph">
+                        </div>
+                        <div class="glyph shadow">
+                        </div>
+                    </button>
+                    <button id="console-status-bar-item" class="status-bar-item">
+                        <div class="glyph">
+                        </div>
+                        <div class="glyph shadow">
+                        </div>
+                    </button>
+                    <div id="counters">
+                        <div id="error-warning-count" class="hidden">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="drawer">
+            <div id="console-view">
+                <div id="console-messages" class="monospace">
+                    <div id="console-prompt" spellcheck="false">
+                        <br>
+                    </div>
+                </div>
+            </div>
+            <div id="drawer-status-bar" class="status-bar">
+                <div id="other-drawer-status-bar-items">
+                    <button id="clear-console-status-bar-item" class="status-bar-item clear-status-bar-item">
+                        <div class="glyph">
+                        </div>
+                        <div class="glyph shadow">
+                        </div>
+                    </button>
+                    <div id="console-filter" class="scope-bar status-bar-item">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
