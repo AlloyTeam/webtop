@@ -65,6 +65,9 @@
     <ClCompile Include="cefclient\cefclient.cpp">
       <Filter>cefclient</Filter>
     </ClCompile>
+    <ClCompile Include="P2PServer.cpp" />
+    <ClCompile Include="network\TcpServer.cpp" />
+    <ClCompile Include="network\MelodyProxy.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AmfStream.h" />
@@ -344,6 +347,15 @@
     <ClInclude Include="filter_handler.h">
       <Filter>cefclient</Filter>
     </ClInclude>
+    <ClInclude Include="exception.h" />
+    <ClInclude Include="network\TcpServer.h" />
+    <ClInclude Include="network\MyProxy.h" />
+    <ClInclude Include="network\MemPool.h" />
+    <ClInclude Include="network\MelodyProxy.h" />
+    <ClInclude Include="network\gzip.h" />
+    <ClInclude Include="network\zlib.h" />
+    <ClInclude Include="E:\zlib-1.2.5\zconf.h" />
+    <ClInclude Include="network\zconf.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cefclient.gyp">
@@ -401,6 +413,9 @@
     <None Include="Release\demo\tip\index.html" />
     <None Include="Release\tip\index.html" />
     <None Include="Release\window\index.html" />
+    <None Include="Release\webdebug\inspector\inspector.html" />
+    <None Include="Release\webdebug\index.html" />
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="cef">
@@ -417,5 +432,8 @@
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="Release\obj\air browser\air browser.exe.intermediate.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="lib\Release\zlibwapi.lib" />
   </ItemGroup>
 </Project>

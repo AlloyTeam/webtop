@@ -11,6 +11,7 @@
 #include "SFMMem.h"
 #include "AmfStream.h"
 #include "P2P.h"
+#include <map>   //包含头文件
 
 using namespace std;
 
@@ -22,6 +23,11 @@ private:
 	CefString url;
 	HINSTANCE hinst;
 public:
+	string lastMessage;
+	string lastResponse;
+    map<string, string> messageMap;
+	vector<long> pParamList;
+	/* 定义map类型的变量 */
 	CefRefPtr<MyHandler> g_handler;
 	HWND hWnd;
 	HWND renderWindow;
@@ -42,6 +48,15 @@ public:
 	void Move(int x, int y);
 	void SetSize(int w, int h);
 	void SetUrl(CefString url);
+	void agentRequest(CefString request);
+	void agentResponse(char* request, char* header, char* content, LPVOID pParam);
+	void replaceRequest(CefString response, LPVOID pProxyParam);
+	void replaceResponse(CefString response, LPVOID pProxyParam);
+	bool hasParam(long pParam);
+	void eraseParam(long pParam);
+	void cancelReplaceResponse(LPVOID pProxyParam);
+	void agentRequest(BYTE* request);
+	void replaceResponse(BYTE* response);
 	CefString GetUrl();
 	void Render(const void* buffer=NULL);
 	void SetTopMost();
@@ -52,6 +67,8 @@ public:
 	void EnableTransparent(UINT ex_style=0);
 	void CreateBrowser(CefString url, CefString param="");
 	void Browse(CefString& url);
+	string getMessage(string guid);
+	string getLastMessage();
 	HWND GetHwnd();
 	HWND GetRenderHwnd();
 	void RunApp(CefString appName, CefString param="", CefString baseUrl="");
@@ -87,7 +104,7 @@ public:
 	void SetReadyHandler(CefString s);
 	void SetTitle(CefString title);
 	CefString TransparentWnd::ReadFile(CefString path);
-	bool TransparentWnd::WriteFile(CefString path, CefString s);
+	bool TransparentWnd::WriteFile(CefString path, const char* s);
 	void CreateBrowserWindowBase(CefString path, UINT ex_style=0, bool isTransparent=true);
 	CefString readyHandler;
 	CefRefPtr<CefDownloadHandler> downloadHandler;
@@ -117,7 +134,7 @@ public:
 	bool isMini;
 	bool isHide;
 	CefString GetCurrentDirectory();
-	void RecieveMessage(int type, char* message, char* ip, unsigned short port);
+	void RecieveMessage(int type, const char* message, char* ip, unsigned short port);
 	void ShowTip(CefString& text);
 	void *pTipWin;
 	void Download(CefString url,CefString filename);
@@ -127,5 +144,6 @@ public:
 	int restoreX;
 	int restoreY;
 	void GetUsers();
+	static string makeGUID();
 };
 #endif

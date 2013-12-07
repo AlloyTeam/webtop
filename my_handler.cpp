@@ -3,6 +3,7 @@
 #include <sstream>
 #include <stdio.h>
 #include <string>
+#include "network\MelodyProxy.h"
 #include "cefclient/resource.h"
 #include "cefclient/resource_util.h"
 #include "transparent_wnd.h"
@@ -10,6 +11,7 @@
 #include "system.h"
 #include "base64.h"
 #include "filter_handler.h"
+#include "network\TcpServer.h"
 extern HINSTANCE hInst;
 extern int CDECL MessageBoxPrintf (TCHAR * szCaption, TCHAR * szFormat, ...)  ;
 
@@ -59,6 +61,7 @@ bool MyHandler::OnKeyEvent(CefRefPtr<CefBrowser> browser,
 	else{
 		string s="var e = new CustomEvent('AlloyDesktopShowDev');dispatchEvent(e);";
 		winHandler->ExecJS(s);
+		return true;
 	}
   }
   if(code == 116&&type == KEYEVENT_RAWKEYDOWN){
@@ -682,7 +685,7 @@ bool MyHandler::Execute(const CefString& name,
 	{
 		CefString path = arguments[1]->GetStringValue().ToString();
 		CefString s = arguments[2]->GetStringValue().ToString();
-		retval = CefV8Value::CreateBool(winHandler->WriteFile(path,s));
+		retval = CefV8Value::CreateBool(winHandler->WriteFile(path,s.ToString().c_str()));
 		// Add a string parameter to the new V8 object.
 		return true;
 	}
@@ -808,7 +811,7 @@ bool MyHandler::Execute(const CefString& name,
 		pStream->ReadWStringSimple(s1,l*2);
 		CefString s(s1);
 		retval=CefV8Value::CreateString(s);
-		delete []s1;
+		//delete s1;
 		return true;
 	}
 	else if(name=="writeWString"){
@@ -819,6 +822,20 @@ bool MyHandler::Execute(const CefString& name,
 			pStream=((AmfStream*)id);
 		}
 		pStream->WriteWStringSimple(s.ToWString().data());
+	}
+	else if(name=="utf82gb"){
+		CefString s = arguments[1]->GetStringValue();
+		char* s1=U2G(s.ToString().c_str());
+		retval=CefV8Value::CreateString(s1);
+		delete s1;
+		return true;
+	}
+	else if(name=="gb2utf8"){
+		CefString s = arguments[1]->GetStringValue();
+		char* s1=G2U(s.ToString().c_str());
+		retval=CefV8Value::CreateString(s1);
+		delete s1;
+		return true;
 	}
 	else if(name=="setStreamPos"){
 		int id = static_cast<int>(arguments[1]->GetIntValue());
@@ -960,6 +977,22 @@ bool MyHandler::Execute(const CefString& name,
 		bool flag=arguments[1]->GetBoolValue();
 		Logoff(flag);
 	}
+	else if(name == "createTcpServer"){
+		TcpServer* tcpServer=new TcpServer();
+		tcpServer->winHandler=winHandler;
+		retval=CefV8Value::CreateInt((long)tcpServer);
+		tcpServer->init();
+		return true;
+	}
+	else if(name == "shutdownTcpServer"){
+		TcpServer* server = (TcpServer*)static_cast<int>(arguments[1]->GetIntValue());
+		delete server;
+	}
+	else if(name=="sendTcpMsg"){
+		TcpServer* server = (TcpServer*)static_cast<int>(arguments[1]->GetIntValue());
+		CefString msg=arguments[2]->GetStringValue();
+		server->sendMsg(msg.ToString().c_str());
+	}
 	else if(name == "connect"){
 		CefString ip=arguments[1]->GetStringValue();
 		CefString uid=arguments[2]->GetStringValue();
@@ -998,6 +1031,15 @@ bool MyHandler::Execute(const CefString& name,
 		CefString path=arguments[1]->GetStringValue();
 		bool flag=arguments[2]->GetBoolValue();
 		retval=CefV8Value::CreateString(find(path.ToWString(),flag));
+		return true;
+	}
+	else if(name == "getLastMessage"){
+		retval=CefV8Value::CreateString(winHandler->getLastMessage());
+		return true;
+	}
+	else if(name == "getMessage"){
+		CefString guid=arguments[1]->GetStringValue();
+		retval=CefV8Value::CreateString(winHandler->getMessage(guid));
 		return true;
 	}
 	else if(name == "createMemory"){
@@ -1058,6 +1100,11 @@ bool MyHandler::Execute(const CefString& name,
 		SaveBitmap(pbm,path);
 		delete pbm;*/
 	}
+	else if(name == "getIP"){
+		CefString ip=TcpServer::GetLocalIP();
+		retval = CefV8Value::CreateString(ip);
+		return true;
+	}
 	else if(name == "getIPAndPort"){
 		CefString ip=winHandler->p2p.IP;
 		unsigned short port=winHandler->p2p.port;
@@ -1089,6 +1136,25 @@ bool MyHandler::Execute(const CefString& name,
 		catch(Exception e){
 			e;
 		}
+	}
+	else if(name=="startProxy"){
+		int port=static_cast<int>(arguments[1]->GetIntValue());
+		MelodyProxy* melodyProxy=new MelodyProxy(winHandler,port,true);
+		melodyProxy->StartProxyServer();
+		retval=CefV8Value::CreateInt((long)melodyProxy);
+	}
+	else if(name=="replaceResponse"){
+		int handler=static_cast<int>(arguments[1]->GetIntValue());
+		CefString content=arguments[2]->GetStringValue();
+		winHandler->replaceResponse(content, (LPVOID)handler);
+	}
+	else if(name=="cancelReplaceResponse"){
+		int handler=static_cast<int>(arguments[1]->GetIntValue());
+		winHandler->cancelReplaceResponse((LPVOID)handler);
+	}
+	else if(name=="closeProxy"){
+		MelodyProxy* proxy=(MelodyProxy *)static_cast<long>(arguments[1]->GetIntValue());
+		proxy->CloseServer();
 	}
 	return false;
 }
@@ -1529,6 +1595,71 @@ void InitCallback()
 	"    handler=handler?handler:window['handler'];"
     "    native function execJS(handler,js);"
 	"    return execJS(handler,js);"
+    "  };"
+    "  AlloyDesktop.createTcpServer = function(handler) {"
+	"    handler=handler?handler:window['handler'];"
+    "    native function createTcpServer(handler);"
+	"    return createTcpServer(handler);"
+    "  };"
+    "  AlloyDesktop.shutdownTcpServer = function(id,handler) {"
+	"    handler=handler?handler:window['handler'];"
+    "    native function shutdownTcpServer(handler,id);"
+	"    return shutdownTcpServer(handler,id);"
+    "  };"
+    "  AlloyDesktop.sendTcpMsg = function(id,msg,handler) {"
+	"    handler=handler?handler:window['handler'];"
+    "    native function sendTcpMsg(handler,id,msg);"
+	"    return sendTcpMsg(handler,id,msg);"
+    "  };"
+    "  AlloyDesktop.execJS = function(js,handler) {"
+	"    handler=handler?handler:window['handler'];"
+    "    native function execJS(handler,js);"
+	"    return execJS(handler,js);"
+    "  };"
+    "  AlloyDesktop.getIP = function(handler) {"
+	"    handler=handler?handler:window['handler'];"
+    "    native function getIP(handler);"
+	"    return getIP(handler);"
+    "  };"
+    "  AlloyDesktop.getLastMessage = function(handler) {"
+	"    handler=handler?handler:window['handler'];"
+    "    native function getLastMessage(handler);"
+	"    return getLastMessage(handler);"
+    "  };"
+     "  AlloyDesktop.getMessage = function(timestamp,handler) {"
+	"    handler=handler?handler:window['handler'];"
+    "    native function getMessage(handler,timestamp);"
+	"    return getMessage(handler,timestamp);"
+    "  };"
+   "  AlloyDesktop.startProxy = function(port,handler) {"
+	"    handler=handler?handler:window['handler'];"
+    "    native function startProxy(handler,port);"
+	"    return startProxy(handler,port);"
+    "  };"
+    "  AlloyDesktop.closeProxy = function(proxy,handler) {"
+	"    handler=handler?handler:window['handler'];"
+    "    native function closeProxy(handler,proxy);"
+	"    return closeProxy(handler,proxy);"
+    "  };"
+    "  AlloyDesktop.replaceResponse = function(responseHandler,response,handler) {"
+	"    handler=handler?handler:window['handler'];"
+    "    native function replaceResponse(handler,responseHandler,response);"
+	"    return replaceResponse(handler,responseHandler,response);"
+    "  };"
+    "  AlloyDesktop.cancelReplaceResponse = function(responseHandler,handler) {"
+	"    handler=handler?handler:window['handler'];"
+    "    native function cancelReplaceResponse(handler,responseHandler);"
+	"    return cancelReplaceResponse(handler,responseHandler);"
+    "  };"
+    "  AlloyDesktop.gb2utf8 = function(s,handler) {"
+	"    handler=handler?handler:window['handler'];"
+    "    native function gb2utf8(handler,s);"
+	"    return gb2utf8(handler,s);"
+    "  };"
+    "  AlloyDesktop.utf82gb = function(s,handler) {"
+	"    handler=handler?handler:window['handler'];"
+    "    native function utf82gb(handler,s);"
+	"    return utf82gb(handler,s);"
     "  };"
 	"})();";
 	CefRegisterExtension("callback/test", code, new MyHandler());

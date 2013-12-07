@@ -9,9 +9,12 @@
  */
 #pragma comment(lib, "ws2_32.lib")
 
+#include <WinSock2.h>
 #include "windows.h"
-#include "..\proto.h"
-#include "..\Exception.h"
+#include "proto.h"
+#include "Exception.h"
+#include <iostream>
+using namespace std;
 
 UserList ClientList;
 
@@ -121,7 +124,8 @@ int main(int argc, char* argv[])
 					{
 						// 将此客户信息删除
 						printf("has a user logout : %s\n", recvbuf.message.logoutmember.userName);
-						UserList::iterator removeiterator = NULL;
+						UserList::iterator removeiterator;// = NULL;
+						bool flag=false;
 						for(UserList::iterator UserIterator=ClientList.begin();
 							UserIterator!=ClientList.end();
 							++UserIterator)
@@ -129,10 +133,11 @@ int main(int argc, char* argv[])
 							if( strcmp( ((*UserIterator)->userName), recvbuf.message.logoutmember.userName) == 0 )
 							{
 								removeiterator = UserIterator;
+								flag=true;
 								break;
 							}
 						}
-						if(removeiterator != NULL)
+						if(flag)
 							ClientList.remove(*removeiterator);
 						break;
 					}

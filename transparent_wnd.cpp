@@ -6,6 +6,7 @@
 #pragma comment( lib, "gdiplus.lib" )
 #include <comdef.h>
 #include <GdiPlus.h>
+#include "network\MelodyProxy.h"
 #include "base64.h"
 #include "system.h"
 using namespace Gdiplus;
@@ -13,6 +14,7 @@ using namespace Gdiplus;
 #define ODS(msg) MessageBox(NULL, msg, msg, 0);
 #define WM_NOTIFYICON	WM_USER+5
 #define IDI_ICON		0x0005
+#define GUID_LEN 64 
 //#ifndef ULONG_PTR
 //#define ULONG_PTR unsigned long*
 //#endif
@@ -1058,7 +1060,7 @@ CefString TransparentWnd::ReadFile(CefString path){
 	return cs;
 }
 
-bool TransparentWnd::WriteFile(CefString path, CefString s){
+bool TransparentWnd::WriteFile(CefString path, const char* s){
 	wstring pathS=path.ToWString();
 	wstring urlS=url.ToWString();
 	replace_allW(urlS,L"file:///",L"");
@@ -1069,7 +1071,7 @@ bool TransparentWnd::WriteFile(CefString path, CefString s){
 		}
 	}
 	ofstream fout(pathS);
-	fout<<s.ToString();
+	fout<<s;
 	fout.flush();
 	fout.close();
 	return true;
@@ -1379,16 +1381,40 @@ void TransparentWnd::SetSize(int w, int h){
 		MoveWindow(hWnd, x, y, w, h, false);
 	}
 }
+string TransparentWnd::getLastMessage(){
+	return lastMessage;
+}
+string TransparentWnd::getMessage(string guid){
+	string s=messageMap[guid];
+	messageMap.erase(guid);
+	return s;
+}
 void TransparentWnd::GetUsers(){
 	p2p.GetU();
 }
-void TransparentWnd::RecieveMessage(int type, char* message, char* ip, unsigned short port){
+void TransparentWnd::RecieveMessage(int type, const char* message, char* ip, unsigned short port){
 	switch(type){
+	case TCPMESSAGE:
+		{
+			std::stringstream ss;
+			lastMessage=message;
+			ss<<"var e = new CustomEvent('AlloyDesktopRecieveTCPMessage',{"
+				"	detail:{"
+				"		message:AlloyDesktop.getLastMessage()"//<<msg<<"\""
+				"	}"
+				"});"<<
+				"dispatchEvent(e);";
+			ExecJS(ss.str());
+			break;
+		}
 	case P2PMESSAGE:
 		{
 			std::stringstream ss;
 			string msg(message);
-			replace_all(msg,"'","\'");
+			replace_all_distinct(msg,"'","\\'");
+			replace_all_distinct(msg,"'","\\'");
+			replace_all_distinct(msg,"\n","\\\n");
+			replace_all_distinct(msg,"/","\\/");
 			ss<<"var e = new CustomEvent('AlloyDesktopP2PRecieveMessage',{"
 				"	detail:{"
 				"		ip:'"<<p2p.IP<<"',"
@@ -1445,4 +1471,113 @@ void TransparentWnd::RecieveMessage(int type, char* message, char* ip, unsigned 
 		}
 		break;
 	}
+}
+string TransparentWnd::makeGUID(){
+	    char buffer[GUID_LEN] = { 0 }; 
+    GUID guid; 
+ 
+    if (CoCreateGuid(&guid)) 
+    { 
+        fprintf(stderr, "create guid error\n"); 
+    } 
+    _snprintf(buffer, sizeof(buffer),  
+        "%08X-%04X-%04x-%02X%02X-%02X%02X%02X%02X%02X%02X",  
+        guid.Data1, guid.Data2, guid.Data3,  
+        guid.Data4[0], guid.Data4[1], guid.Data4[2],  
+        guid.Data4[3], guid.Data4[4], guid.Data4[5],  
+        guid.Data4[6], guid.Data4[7]); 
+	return buffer;
+}
+void TransparentWnd::agentRequest(CefString request){
+    std::stringstream ss;
+	string guid=makeGUID();
+	messageMap[guid]=request;
+	ss<<"var e = new CustomEvent('AlloyDesktopRecieveRequest',{"
+		"	detail:{"
+		"		message:AlloyDesktop.getMessage('"<<guid<<"')"//<<msg<<"\""
+		"	}"
+		"});"<<
+		"dispatchEvent(e);";
+	ExecJS(ss.str());
+}
+void TransparentWnd::agentResponse(char* request, char* header, char* content, LPVOID pParam){
+	std::stringstream ss;
+	long handler=(long)pParam;
+	string guid1=makeGUID();
+	messageMap[guid1]=request;
+	string guid2=makeGUID();
+	messageMap[guid2]=header;
+	string guid3=makeGUID();
+	if(IsTextUTF8(content, strlen(content))){
+		messageMap[guid3]=content;
+	}
+	else{
+		char * s1=G2U(content);
+		messageMap[guid3]=s1;
+		delete s1;
+	}
+	ss<<"var e = new CustomEvent('AlloyDesktopRecieveResponse',{"
+		"	detail:{"
+		"		handler:"<<handler<<","
+		"		request:AlloyDesktop.getMessage('"<<guid1<<"'),"
+		"		header:AlloyDesktop.getMessage('"<<guid2<<"'),"
+		"		content:AlloyDesktop.getMessage('"<<guid3<<"')"//<<msg<<"\""
+		"	}"
+		"});"<<
+		"dispatchEvent(e);";
+	pParamList.push_back((long)pParam);
+	ExecJS(ss.str());
+}
+bool TransparentWnd::hasParam(long pParam){
+	vector<long>::iterator it=pParamList.begin();
+	for(;it!=pParamList.end();++it){
+		if(*it==pParam){
+			return true;
+		}
+	}
+	return false;
+}
+void TransparentWnd::eraseParam(long pParam){
+	vector<long>::iterator it=pParamList.begin();
+	for(;it!=pParamList.end();++it){
+		if(*it==pParam){
+			pParamList.erase(it);
+			break;
+		}
+	}
+}
+void TransparentWnd::replaceRequest(CefString rRequest, LPVOID pParam){
+	MelodyProxy::ProxyParam* pProxyParam=(MelodyProxy::ProxyParam*)pParam;
+	lastResponse=rRequest.ToString();
+	::SetEvent(pProxyParam->ReplaceRequestOK);
+}
+void TransparentWnd::replaceResponse(CefString response, LPVOID pParam){
+	if(hasParam((long)pParam)){
+		MelodyProxy::ProxyParam* pProxyParam=(MelodyProxy::ProxyParam*)pParam;
+		if(IsBadReadPtr(pProxyParam,sizeof(MelodyProxy::ProxyParam))){
+			return;
+		}
+		if(pProxyParam->Response!=NULL){
+			delete pProxyParam->Response;
+			pProxyParam->Response=NULL;
+		}
+		pProxyParam->Response=new char[MAXBUFFERSIZE*50];
+		strcpy(pProxyParam->Response,response.ToString().c_str());
+		pProxyParam->CancelReplaceResponse=false;
+		::SetEvent(pProxyParam->ReplaceResponseOK);
+	}
+}
+void TransparentWnd::cancelReplaceResponse(LPVOID pParam){
+	if(hasParam((long)pParam)){
+		MelodyProxy::ProxyParam* pProxyParam=(MelodyProxy::ProxyParam*)pParam;
+		if(IsBadReadPtr(pProxyParam,sizeof(MelodyProxy::ProxyParam))){
+			return;
+		}
+		pProxyParam->CancelReplaceResponse=true;
+		::SetEvent(pProxyParam->ReplaceResponseOK);
+	}
+}
+void TransparentWnd::agentRequest(BYTE* request){
+}
+void TransparentWnd::replaceResponse(BYTE* reponse){
 }

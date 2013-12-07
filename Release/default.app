@@ -1,7 +1,7 @@
 [BASE]
-url=default/index.htm
-width=0
-height=0
-enableDrag=1
+url=webdebug/inspector/inspector.html
+width=800
+height=400
 enableResize=1
-disableTransparent=0
+x=100
+y=200

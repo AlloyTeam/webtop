@@ -165,7 +165,7 @@
       <MinimalRebuild>false</MinimalRebuild>
       <OmitFramePointers>true</OmitFramePointers>
       <Optimization>MaxSpeed</Optimization>
-      <PreprocessorDefinitions>_WIN32_WINNT=0x0601;WINVER=0x0601;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_HAS_EXCEPTIONS=0;_SECURE_ATL;CHROMIUM_BUILD;TOOLKIT_VIEWS=1;ENABLE_REMOTING=1;ENABLE_P2P_APIS=1;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;ENABLE_GPU=1;ENABLE_EGLIMAGE=1;USE_SKIA=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;ENABLE_REGISTER_PROTOCOL_HANDLER=1;ENABLE_WEB_INTENTS=1;ENABLE_PLUGIN_INSTALLATION=1;USING_CEF_SHARED;__STDC_FORMAT_MACROS;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WIN32_WINNT=0x0601;WINVER=0x0601;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_HAS_EXCEPTIONS=0;_SECURE_ATL;CHROMIUM_BUILD;TOOLKIT_VIEWS=1;ENABLE_REMOTING=1;ENABLE_P2P_APIS=1;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;ENABLE_GPU=1;ENABLE_EGLIMAGE=1;USE_SKIA=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;ENABLE_REGISTER_PROTOCOL_HANDLER=1;ENABLE_WEB_INTENTS=1;ENABLE_PLUGIN_INSTALLATION=1;USING_CEF_SHARED;__STDC_FORMAT_MACROS;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;ZLIB_WINAPI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <StringPooling>true</StringPooling>
@@ -177,7 +177,7 @@
       <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
     <Link>
-      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;comctl32.lib;shlwapi.lib;rpcrt4.lib;opengl32.lib;glu32.lib;lib\$(Configuration)\libcef.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;comctl32.lib;rpcrt4.lib;opengl32.lib;glu32.lib;lib\$(Configuration)\libcef.lib;lib\$(Configuration)\zlibwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>../../../third_party/directxsdk/files/Lib/x86;../../../third_party/platformsdk_win7/files/Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>/safeseh /dynamicbase /ignore:4199 /ignore:4221 /nxcompat %(AdditionalOptions)</AdditionalOptions>
       <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
@@ -276,6 +276,7 @@
     <None Include="cefclient\res\small.ico" />
     <None Include="cefclient\res\logo.png" />
     <None Include="cefclient\res\uiplugin.html" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="include\internal\npapi\README-TRANSFER.txt" />
     <None Include="Release\browser\default.html" />
     <None Include="Release\browser\download.html" />
@@ -288,12 +289,16 @@
     <None Include="Release\demo\tip\index.html" />
     <None Include="Release\ip.js" />
     <None Include="Release\tip\index.html" />
+    <None Include="Release\webdebug\index.html" />
+    <None Include="Release\webdebug\inspector\inspector.html" />
     <None Include="Release\window\index.html" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AmfStream.h" />
     <ClInclude Include="base64.h" />
     <ClInclude Include="CodeConvertor.h" />
+    <ClInclude Include="E:\zlib-1.2.5\zconf.h" />
+    <ClInclude Include="exception.h" />
     <ClInclude Include="filter_handler.h" />
     <ClInclude Include="include\cef_download_handler.h" />
     <ClInclude Include="include\cef_request.h" />
@@ -386,6 +391,13 @@
     <ClInclude Include="cefclient\resource_util.h" />
     <ClInclude Include="myutil.h" />
     <ClInclude Include="my_handler.h" />
+    <ClInclude Include="network\gzip.h" />
+    <ClInclude Include="network\MelodyProxy.h" />
+    <ClInclude Include="network\MemPool.h" />
+    <ClInclude Include="network\MyProxy.h" />
+    <ClInclude Include="network\TcpServer.h" />
+    <ClInclude Include="network\zconf.h" />
+    <ClInclude Include="network\zlib.h" />
     <ClInclude Include="P2P.h" />
     <ClInclude Include="proto.h" />
     <ClInclude Include="res_scheme.h" />
@@ -417,7 +429,10 @@
     <ClCompile Include="CodeConvertor.cpp" />
     <ClCompile Include="myutil.cpp" />
     <ClCompile Include="my_handler.cpp" />
+    <ClCompile Include="network\MelodyProxy.cpp" />
+    <ClCompile Include="network\TcpServer.cpp" />
     <ClCompile Include="P2P.cpp" />
+    <ClCompile Include="P2PServer.cpp" />
     <ClCompile Include="res_scheme.cpp" />
     <ClCompile Include="SFMMem.cpp" />
     <ClCompile Include="system.cpp" />
@@ -434,6 +449,9 @@
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="Release\obj\air browser\air browser.exe.intermediate.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="lib\Release\zlibwapi.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

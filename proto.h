@@ -77,6 +77,7 @@ struct stServerToClient
 #define P2PSOMEONEWANTTOCALLYOU 102  // 服务器向客户端发送的消息
                                      // 希望此客户端发送一个UDP打洞包
 #define P2PTRASH        103          // 客户端发送的打洞包，接收端应该忽略此消息
+#define TCPMESSAGE 105               // TCP消息
 
 // 客户端之间发送消息格式
 struct stP2PMessage
