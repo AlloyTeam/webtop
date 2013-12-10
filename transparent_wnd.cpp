@@ -875,6 +875,7 @@ TransparentWnd::TransparentWnd(void)
 	pStream = new AmfStream(p);
 	hBitMap=NULL;
 	pTipWin=NULL;
+	InitializeCriticalSection(&cs);
 }
 
 TransparentWnd::~TransparentWnd(void)
@@ -901,6 +902,7 @@ TransparentWnd::~TransparentWnd(void)
 	if(pTipWin){
 		delete (TransparentWnd*)pTipWin;
 	}
+	DeleteCriticalSection(&cs);
 	if(count==0){
 		delete pServer;
 		GdiplusShutdown(m_gdiplusToken);
@@ -1385,8 +1387,10 @@ string TransparentWnd::getLastMessage(){
 	return lastMessage;
 }
 string TransparentWnd::getMessage(string guid){
+	EnterCriticalSection(&cs);
 	string s=messageMap[guid];
 	messageMap.erase(guid);
+	LeaveCriticalSection(&cs);
 	return s;
 }
 void TransparentWnd::GetUsers(){
@@ -1473,7 +1477,7 @@ void TransparentWnd::RecieveMessage(int type, const char* message, char* ip, uns
 	}
 }
 string TransparentWnd::makeGUID(){
-	    char buffer[GUID_LEN] = { 0 }; 
+	char buffer[GUID_LEN] = { 0 }; 
     GUID guid; 
  
     if (CoCreateGuid(&guid)) 
@@ -1488,13 +1492,20 @@ string TransparentWnd::makeGUID(){
         guid.Data4[6], guid.Data4[7]); 
 	return buffer;
 }
-void TransparentWnd::agentRequest(CefString request){
+void TransparentWnd::agentRequest(char* header, char* content, LPVOID pParam){
+	long handler=(long)pParam;
     std::stringstream ss;
-	string guid=makeGUID();
-	messageMap[guid]=request;
+	string guid1=makeGUID();
+	string guid2=makeGUID();
+	EnterCriticalSection(&cs);
+	messageMap[guid1]=header;
+	messageMap[guid2]=content;
+	LeaveCriticalSection(&cs);
 	ss<<"var e = new CustomEvent('AlloyDesktopRecieveRequest',{"
 		"	detail:{"
-		"		message:AlloyDesktop.getMessage('"<<guid<<"')"//<<msg<<"\""
+		"		handler:"<<handler<<","
+		"		header:AlloyDesktop.getMessage('"<<guid1<<"'),"
+		"		content:AlloyDesktop.getMessage('"<<guid2<<"')"//<<msg<<"\""
 		"	}"
 		"});"<<
 		"dispatchEvent(e);";
@@ -1504,18 +1515,27 @@ void TransparentWnd::agentResponse(char* request, char* header, char* content, L
 	std::stringstream ss;
 	long handler=(long)pParam;
 	string guid1=makeGUID();
-	messageMap[guid1]=request;
 	string guid2=makeGUID();
-	messageMap[guid2]=header;
 	string guid3=makeGUID();
+	EnterCriticalSection(&cs);
+	messageMap[guid1]=request;
+	messageMap[guid2]=header;
 	if(IsTextUTF8(content, strlen(content))){
 		messageMap[guid3]=content;
 	}
 	else{
-		char * s1=G2U(content);
-		messageMap[guid3]=s1;
-		delete s1;
+		if(strstr(content,"content=\"text/html; charset=big5\"")){
+			char * s1=B2U(content);
+			messageMap[guid3]=s1;
+			delete s1;
+		}
+		else{
+			char * s1=G2U(content);
+			messageMap[guid3]=s1;
+			delete s1;
+		}
 	}
+	LeaveCriticalSection(&cs);
 	ss<<"var e = new CustomEvent('AlloyDesktopRecieveResponse',{"
 		"	detail:{"
 		"		handler:"<<handler<<","
@@ -1525,57 +1545,64 @@ void TransparentWnd::agentResponse(char* request, char* header, char* content, L
 		"	}"
 		"});"<<
 		"dispatchEvent(e);";
-	pParamList.push_back((long)pParam);
 	ExecJS(ss.str());
 }
-bool TransparentWnd::hasParam(long pParam){
-	vector<long>::iterator it=pParamList.begin();
-	for(;it!=pParamList.end();++it){
-		if(*it==pParam){
-			return true;
-		}
-	}
-	return false;
-}
-void TransparentWnd::eraseParam(long pParam){
-	vector<long>::iterator it=pParamList.begin();
-	for(;it!=pParamList.end();++it){
-		if(*it==pParam){
-			pParamList.erase(it);
-			break;
-		}
-	}
-}
-void TransparentWnd::replaceRequest(CefString rRequest, LPVOID pParam){
+void TransparentWnd::replaceRequest(CefString request, LPVOID pParam){
 	MelodyProxy::ProxyParam* pProxyParam=(MelodyProxy::ProxyParam*)pParam;
-	lastResponse=rRequest.ToString();
-	::SetEvent(pProxyParam->ReplaceRequestOK);
+	if(IsBadReadPtr(pProxyParam,sizeof(MelodyProxy::ProxyParam))){
+		return;
+	}
+	pProxyParam->replaceRequest=true;
+	strcpy(pProxyParam->Request,request.ToString().c_str());
+	::PulseEvent(pProxyParam->ResponseOK);
+}
+void TransparentWnd::response(CefString response, LPVOID pParam){
+	MelodyProxy::ProxyParam* pProxyParam=(MelodyProxy::ProxyParam*)pParam;
+	if(IsBadReadPtr(pProxyParam,sizeof(MelodyProxy::ProxyParam))){
+		return;
+	}
+	if(pProxyParam->Response!=NULL){
+		delete pProxyParam->Response;
+		pProxyParam->Response=NULL;
+	}
+	pProxyParam->replaceRequest=false;
+	pProxyParam->Response=new char[MAXBUFFERSIZE*50];
+	strcpy(pProxyParam->Response,response.ToString().c_str());
+	pProxyParam->cancelResponse=false;
+	::PulseEvent(pProxyParam->ResponseOK);
 }
 void TransparentWnd::replaceResponse(CefString response, LPVOID pParam){
-	if(hasParam((long)pParam)){
-		MelodyProxy::ProxyParam* pProxyParam=(MelodyProxy::ProxyParam*)pParam;
-		if(IsBadReadPtr(pProxyParam,sizeof(MelodyProxy::ProxyParam))){
-			return;
-		}
-		if(pProxyParam->Response!=NULL){
-			delete pProxyParam->Response;
-			pProxyParam->Response=NULL;
-		}
-		pProxyParam->Response=new char[MAXBUFFERSIZE*50];
-		strcpy(pProxyParam->Response,response.ToString().c_str());
-		pProxyParam->CancelReplaceResponse=false;
-		::SetEvent(pProxyParam->ReplaceResponseOK);
+	MelodyProxy::ProxyParam* pProxyParam=(MelodyProxy::ProxyParam*)pParam;
+	if(IsBadReadPtr(pProxyParam,sizeof(MelodyProxy::ProxyParam))){
+		return;
 	}
+	if(pProxyParam->Response!=NULL){
+		delete pProxyParam->Response;
+		pProxyParam->Response=NULL;
+	}
+	pProxyParam->replaceRequest=false;
+	pProxyParam->Response=new char[MAXBUFFERSIZE*50];
+	strcpy(pProxyParam->Response,response.ToString().c_str());
+	pProxyParam->CancelReplaceResponse=false;
+	::PulseEvent(pProxyParam->ReplaceResponseOK);
+}
+void TransparentWnd::cancelResponse(LPVOID pParam){
+	MelodyProxy::ProxyParam* pProxyParam=(MelodyProxy::ProxyParam*)pParam;
+	if(IsBadReadPtr(pProxyParam,sizeof(MelodyProxy::ProxyParam))){
+		return;
+	}
+	pProxyParam->replaceRequest=false;
+	pProxyParam->cancelResponse=true;
+	::PulseEvent(pProxyParam->ResponseOK);
 }
 void TransparentWnd::cancelReplaceResponse(LPVOID pParam){
-	if(hasParam((long)pParam)){
-		MelodyProxy::ProxyParam* pProxyParam=(MelodyProxy::ProxyParam*)pParam;
-		if(IsBadReadPtr(pProxyParam,sizeof(MelodyProxy::ProxyParam))){
-			return;
-		}
-		pProxyParam->CancelReplaceResponse=true;
-		::SetEvent(pProxyParam->ReplaceResponseOK);
+	MelodyProxy::ProxyParam* pProxyParam=(MelodyProxy::ProxyParam*)pParam;
+	if(IsBadReadPtr(pProxyParam,sizeof(MelodyProxy::ProxyParam))){
+		return;
 	}
+	pProxyParam->replaceRequest=false;
+	pProxyParam->CancelReplaceResponse=true;
+	::PulseEvent(pProxyParam->ReplaceResponseOK);
 }
 void TransparentWnd::agentRequest(BYTE* request){
 }

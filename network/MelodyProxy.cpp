@@ -1,6 +1,7 @@
 #include "MelodyProxy.h"
 #include "gzip.h"
 int MelodyProxy::linkCount = 0;
+map<wstring, wstring> MelodyProxy::proxyMap;
 
 // 读取远程主机数据，并发往本地客户机
 unsigned int MelodyProxy::ProxyToServer(LPVOID pParam)
@@ -49,9 +50,17 @@ unsigned int MelodyProxy::ProxyToServer(LPVOID pParam)
 	//
 
 	memset(&server,0,sizeof(server));
-	memcpy(&(server.sin_addr),hp->h_addr,hp->h_length);
+	/*for(int i=0;;i++){
+		if(hp->h_addr_list[i]!='\0'){
+			memmove(&(server.sin_addr),hp->h_addr_list[i],4);
+			char *ip;
+			ip=inet_ntoa(server.sin_addr);
+			MessageBoxA(NULL,ip,ip,0);
+		}
+    }*/ 
 	server.sin_family = hp->h_addrtype;
 	server.sin_port = htons(port);
+	memcpy(&(server.sin_addr),hp->h_addr,hp->h_length);
 	conn_socket = socket(AF_INET,socket_type,IPPROTO_TCP);/* 打开一个 socket */
 
 	if (conn_socket < 0 ) 
@@ -120,8 +129,8 @@ unsigned int MelodyProxy::ProxyToServer(LPVOID pParam)
 		if (retval == 0) 
 		{
 			//Log("Server closed connection\n");
-			pPar->pPair->IsProxyToServClosed=TRUE;
 			closesocket(conn_socket);
+			pPar->pPair->IsProxyToServClosed=TRUE;
 			break;
 		}
 		Len=retval;
@@ -244,8 +253,8 @@ unsigned int MelodyProxy::ProxyToServer(LPVOID pParam)
 			if (retval == SOCKET_ERROR) 
 			{
 				fprintf(stderr,"send() failed: error %d\n",WSAGetLastError());
-				pPar->pPair->IsProxyToServClosed=TRUE;
 				closesocket(pPar->pPair->ProxyToUserSocket);
+				pPar->pPair->IsProxyToUserClosed=TRUE;
 				break;						
 			}
 		}
@@ -275,7 +284,6 @@ unsigned int MelodyProxy::ProxyToServer(LPVOID pParam)
 }
 int MelodyProxy::Response(char* header, char* content, int count, MelodyProxy* pProxy, ProxyParam* pPar){
 	char* bufferAll=new char[MAXBUFFERSIZE*50];
-	ZeroMemory(bufferAll,MAXBUFFERSIZE*50);
 	int retval=0;
 	//如果是gzip，先解码
 	char *p=strstr(header,"Content-Encoding: gzip");
@@ -283,7 +291,6 @@ int MelodyProxy::Response(char* header, char* content, int count, MelodyProxy* p
 	if(p){
 		contentLength=MAXBUFFERSIZE*50;
 		Byte* data=new Byte[MAXBUFFERSIZE*50];
-		ZeroMemory(data,MAXBUFFERSIZE*50);
 		httpgzdecompress((Byte*)content, count, data, &contentLength);
 		char buf[100],buf1[100];
 		sprintf(buf,"%s%ld","Content-Length: ",contentLength);
@@ -292,8 +299,8 @@ int MelodyProxy::Response(char* header, char* content, int count, MelodyProxy* p
 		replace(header,buf1,buf, header3, MAXBUFFERSIZE);
 		replace(header3,"Content-Encoding: gzip\r\n","",header4,MAXBUFFERSIZE);
 		header=header4;
-		ZeroMemory(content,MAXBUFFERSIZE*50);
 		memcpy(content,data,contentLength);
+		content[contentLength]=0;
 		delete data;
 	}
 	strcat(bufferAll,header);
@@ -315,9 +322,9 @@ int MelodyProxy::Response(char* header, char* content, int count, MelodyProxy* p
 	if (retval == SOCKET_ERROR) 
 	{
 		fprintf(stderr,"send() failed: error %d\n",WSAGetLastError());
-		pPar->pPair->IsProxyToServClosed=TRUE;
 		closesocket(pPar->pPair->ProxyToUserSocket);
+		pPar->pPair->ProxyToUserSocket=TRUE;
 	}
-	delete bufferAll;
+	delete []bufferAll;
 	return retval;
 }

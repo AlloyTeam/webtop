@@ -20,13 +20,13 @@ void InitCallback();
 class TransparentWnd
 {
 private:
+	CRITICAL_SECTION cs;		//临界段
 	CefString url;
 	HINSTANCE hinst;
 public:
 	string lastMessage;
 	string lastResponse;
     map<string, string> messageMap;
-	vector<long> pParamList;
 	/* 定义map类型的变量 */
 	CefRefPtr<MyHandler> g_handler;
 	HWND hWnd;
@@ -48,12 +48,12 @@ public:
 	void Move(int x, int y);
 	void SetSize(int w, int h);
 	void SetUrl(CefString url);
-	void agentRequest(CefString request);
+	void response(CefString response, LPVOID pParam);
+	void cancelResponse(LPVOID pParam);
+	void agentRequest(char* header, char* content, LPVOID pParam);
 	void agentResponse(char* request, char* header, char* content, LPVOID pParam);
-	void replaceRequest(CefString response, LPVOID pProxyParam);
+	void replaceRequest(CefString request, LPVOID pParam);
 	void replaceResponse(CefString response, LPVOID pProxyParam);
-	bool hasParam(long pParam);
-	void eraseParam(long pParam);
 	void cancelReplaceResponse(LPVOID pProxyParam);
 	void agentRequest(BYTE* request);
 	void replaceResponse(BYTE* response);

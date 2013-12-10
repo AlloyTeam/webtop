@@ -166,35 +166,121 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         var server,proxy;
         var A = AlloyDesktop;
         var first = true;
-        function replaceResponse(detail, s1, s2){
+        var count = 0;
+        var guid;
+        function newGuid() {
+            var guid = "";
+            for (var i = 1; i <= 32; i++) {
+                var n = Math.floor(Math.random() * 16.0).toString(16);
+                guid += n;
+                if ((i == 8) || (i == 12) || (i == 16) || (i == 20))
+                    guid += "-";
+            }
+            return guid;
+        }
+        function getRequestInfo(header) {
+            var lines = header.split("\r\n");
+            var first = lines[0];
+            var infos = first.split(' ');
+            var cmd = infos[0];
+            var url = infos[1];
+            var o = { cmd: cmd, url: url };
+            return o;
+        }
+        function parseResponse(message) {
+            console.log(message);
+            if (message.indexOf("dom:") == 0) {
+                var d = document.createElement("html");
+                d.innerHTML = message.substr(4);
+                WebInspector.domAgent._setDocument(d);
+                count = 0;
+            }
+            else if (message.indexOf("log:") == 0) {
+                var content = message.substr(4);
+                WebInspector.console.addMessage(WebInspector.ConsoleMessage.createTextMessage(content,
+                  WebInspector.ConsoleMessage.MessageLevel.Log));
+            }
+            else if (message.indexOf("html:") == 0) {
+                var content = message.substr(5);
+                var o = eval("(" + content + ")");
+                var script = new WebInspector.Script("js" + new Date().getTime(), o.url,
+                  0, 0, o.value.split("\n").length, 10000000, 0, 0, true);
+                script._source = o.value;
+                WebInspector.panels.scripts._presentationModel._addScript(script);
+                WebInspector.console.addMessage(WebInspector.ConsoleMessage.createTextMessage("load html:" + o.url,
+                  WebInspector.ConsoleMessage.MessageLevel.Log));
+
+            }
+            else if (message.indexOf("js:") == 0) {
+                var content = message.substr(3);
+                var o = eval("(" + content + ")");
+                var script = new WebInspector.Script("js" + new Date().getTime(), o.url, 0,
+                  0, o.value.split("\n").length, 10000000, 0, 0, false);
+                script._source = o.value;
+                WebInspector.panels.scripts._presentationModel._addScript(script);
+                WebInspector.console.addMessage(WebInspector.ConsoleMessage.createTextMessage("load js:" + o.url,
+                  WebInspector.ConsoleMessage.MessageLevel.Log));
+            }
+            else if (message.indexOf("cmd:") == 0) {
+                var content = message.substr(4);
+                if (content == "reset") {
+                    WebInspector.panels.scripts._presentationModel._debuggerReset();
+                }
+            }
+            else if (message.indexOf("url:") == 0) {
+                WebInspector.console.addMessage(WebInspector.ConsoleMessage.createTextMessage("当前网页" + message,
+                  WebInspector.ConsoleMessage.MessageLevel.Log));
+            }
+            else if (message.indexOf("connect:") == 0) {
+                cmdList = ["url:document.location.href", "dom:document.documentElement.outerHTML"];
+            }
+        }
+        function mbStringLength(s) {
+            var totalLength = 0;
+            var i;
+            var charCode;
+            for (i = 0; i < s.length; i++) {
+                charCode = s.charCodeAt(i);
+                if (charCode < 0x007f) {
+                    totalLength = totalLength + 1;
+                } else if ((0x0080 <= charCode) && (charCode <= 0x07ff)) {
+                    totalLength += 2;
+                } else if ((0x0800 <= charCode) && (charCode <= 0xffff)) {
+                    totalLength += 3;
+                }
+            }
+            //alert(totalLength);
+            return totalLength;
+        } 
+        function replaceResponse(detail, s1, s2) {
             var content = detail.content;
             console.log("-----------------------------------------------------------------------------------------");
-            content = content.replace("text/html; charset=gb2312", "text/html; charset=utf8");
             var handler = e.detail.handler;
             var request = detail.request;
             var header = detail.header;
-            var reg = new RegExp(s1, "g"); //创建正则RegExp对象
+            var regCharset = new RegExp("text\/html; charset=[\\w-]+", ""); //创建正则RegExp对象
+            header = header.replace(regCharset, "text/html; charset=utf-8");
+            content = content.replace(regCharset, "text/html; charset=utf-8");
+            var reg = new RegExp(s1, ""); //创建正则RegExp对象
             content = content.replace(reg, s2);
-            console.log(header);
             function test($1) {
-                return "Content-Length: " + content.length + "\r\n";
+                return "\r\nContent-Length: " + mbStringLength(content) + "";
             }
-            var reg1 = new RegExp("(Content-Length: \d\r\n)", "");
-            header = header.replace(reg1,test);
+            var reg1 = new RegExp("\\r\\nContent-Length: \\d+", "");
+            header = header.replace(reg1, "\r\nContent-Length: " + mbStringLength(content) + "");
             var response1 = header + content;
-            console.log(content);
             A.replaceResponse(handler, response1);
         }
         addEventListener("AlloyDesktopReady", function () {
             server = AlloyDesktop.createTcpServer();
             proxy = AlloyDesktop.startProxy(8888);
-            var e = document.createElement('div');
-            e.innerHTML = "<span style=\"margin-left:200px;\">" + "请连接server "
-                + A.getIP() + ":2280" + "</span><span id=\"refreshBtn\" style=\"cursor:pointer;color:blue;margin-left:100px;\">刷新html</span>";
-            header.appendChild(e);
+            ipInfo.innerHTML="请连接server " + A.getIP() + ":8888";
             WebInspector.currentPanel = WebInspector.panels.console;
             refreshBtn.onclick = function () {
                 A.sendTcpMsg(server, "getHtml");
+            }
+            debugBtn.onclick = function () {
+                count=0;
             }
             header.onmousedown = function () {
                 AlloyDesktop.drag();
@@ -211,22 +297,99 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         });
         var iframe, doc;
         var html;
+        var pollHandler;
+        var cmdList = ["url:document.location.href","dom:document.documentElement.outerHTML"];
+        function responsePoll(content) {
+            if (content) {
+                cmdList.push(content);
+            }
+            else {
+                if (cmdList.length <= 0) {
+                    return;
+                }
+            }
+            var js = cmdList.pop();
+            if (pollHandler){
+                var header = 'HTTP/1.1 200 OK\r\nContent-Length: '
+                    + mbStringLength(js) + '\r\nContent-Type: text/html\r\n\r\n';
+                A.response(pollHandler, header + js);
+                pollHandler = null;
+            }
+        }
         addEventListener("AlloyDesktopRecieveRequest",
          function (e) {
-             WebInspector.console.addMessage(WebInspector.ConsoleMessage.createTextMessage(e.detail.message, WebInspector.ConsoleMessage.MessageLevel.Log));
+             var detail = e.detail;
+             var header = detail.header;
+             console.log(header);
+             console.log(detail.content);
+             var requestInfo = getRequestInfo(header);
+             var url = requestInfo.url;
+             var cmd = requestInfo.cmd;
+             if (cmd == 'POST' && url.indexOf("/debug?identifier=") != -1) {
+                 console.log('poll');
+                 if (detail.content.length > 0) {
+                     parseResponse(detail.content);
+                     /*WebInspector.console.addMessage(WebInspector.ConsoleMessage.createTextMessage(detail.content,
+                     WebInspector.ConsoleMessage.MessageLevel.Log));*/
+                 }
+                 pollHandler = detail.handler;
+                 if (cmdList.length > 0) {
+                     responsePoll();
+                 }
+                 else {
+                     setTimeout(function () { if (pollHandler) { responsePoll(""); } }, 30000);
+                 }
+             }
+             else {
+                 if (detail.header.indexOf('\r\nIf-Modified-Since: ') != -1) {
+                     var reg1 = new RegExp("\\r\\nIf-Modified-Since: [^\r]*", "");
+                     var request = header.replace(reg1, "");
+                     A.replaceRequest(detail.handler, request);
+                 }
+                 else {
+                     A.cancelResponse(detail.handler);
+                 }
+             }
          });
          addEventListener("AlloyDesktopRecieveResponse",
          function (e) {
              var detail = e.detail;
+             var requestInfo = getRequestInfo(detail.request);
+             var url = requestInfo.url;
+             var cmd = requestInfo.cmd;
              var header = detail.header;
-             if (header.indexOf('\r\nContent-Type: text\/html') != -1) {
-                 replaceResponse(detail, '</head>', '<script>alert("恭喜你，成功连接测试机器");<\/script><\/head>');
+             var type = "js";
+             var reg = /\r\nContent-Type: ([^\r]*)/;
+             var result = reg.exec(header);
+             type = result[1];
+             if (type.indexOf("text/html")!=-1) {
+                 guid = newGuid();
+                 var reg1 = new RegExp("\\r\\nCache-Control: [^\r]*", "");
+                 var header1 = header.replace(reg1, "\r\nCache-Control: no-cache");
+                 detail.header1 = header;
+                 replaceResponse(detail, '<head([^>]*)>', '<head$1><script>'
+                  + A.readFile("insert.js").replace(/\n/g, "").replace('guid', guid)
+                  + '<\/script>');
              }
              else {
-                 A.cancelReplaceResponse(detail.handler);
+                 if (header.indexOf("\r\nCache-Control: ") != -1) {
+                     var reg1 = new RegExp("\\r\\nCache-Control: [^\r]*", "");
+                     var header1 = header.replace(reg1, "\r\nCache-Control: no-cache");
+                     A.replaceResponse(detail.handler, header1 + detail.content);
+                 }
+                 else {
+                     A.cancelReplaceResponse(detail.handler);
+                 }
              }
-             //WebInspector.console.addMessage(WebInspector.ConsoleMessage.createTextMessage(detail.request, WebInspector.ConsoleMessage.MessageLevel.Log));
-             //WebInspector.console.addMessage(WebInspector.ConsoleMessage.createTextMessage(detail.header, WebInspector.ConsoleMessage.MessageLevel.Log));
+             if (type != "text/css") {
+                 var content = detail.content;
+                 var script = new WebInspector.Script("js" + new Date().getTime(), requestInfo.url,
+                  0, 0, content.split("\n").length, 10000000, 0, 0, true);
+                 script._source = content;
+                 WebInspector.panels.scripts._presentationModel._addScript(script);
+                 WebInspector.console.addMessage(WebInspector.ConsoleMessage.createTextMessage("load:" + requestInfo.url,
+                  WebInspector.ConsoleMessage.MessageLevel.Log));
+             }
          });
          addEventListener("AlloyDesktopRecieveTCPMessage",
          function (e) {
@@ -240,17 +403,18 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                  var d = document.createElement("html");
                  d.innerHTML = message.substr(4);
                  WebInspector.domAgent._setDocument(d);
+                 count = 0;
              }
              else if (message.indexOf("log:") == 0) {
-                 //WebInspector.console.addMessage(WebInspector.ConsoleMessage.createTextMessage(message.substr(7), WebInspector.ConsoleMessage.MessageLevel.Log));
-                 //console.log(eval("(" + message.substr(7) + ")"));
                  var content = message.substr(4);
-                 WebInspector.console.addMessage(WebInspector.ConsoleMessage.createTextMessage(content, WebInspector.ConsoleMessage.MessageLevel.Log));
+                 WebInspector.console.addMessage(WebInspector.ConsoleMessage.createTextMessage(content,
+                  WebInspector.ConsoleMessage.MessageLevel.Log));
              }
              else if (message.indexOf("html:") == 0) {
                  var content = message.substr(5);
                  var o = eval("(" + content + ")");
-                 var script = new WebInspector.Script("js"+new Date().getTime(), o.url, 0, 0, o.value.split("\n").length, 10000000, 0, 0, true);
+                 var script = new WebInspector.Script("js" + new Date().getTime(), o.url,
+                  0, 0, o.value.split("\n").length, 10000000, 0, 0, true);
                  script._source = o.value;
                  WebInspector.panels.scripts._presentationModel._addScript(script);
                  WebInspector.console.addMessage(WebInspector.ConsoleMessage.createTextMessage("load html:" + o.url,
@@ -260,7 +424,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
              else if (message.indexOf("js:") == 0) {
                  var content = message.substr(3);
                  var o = eval("(" + content + ")");
-                 var script = new WebInspector.Script("js" + new Date().getTime(), o.url, 0, 0, o.value.split("\n").length, 10000000, 0, 0, false);
+                 var script = new WebInspector.Script("js" + new Date().getTime(), o.url, 0,
+                  0, o.value.split("\n").length, 10000000, 0, 0, false);
                  script._source = o.value;
                  WebInspector.panels.scripts._presentationModel._addScript(script);
                  WebInspector.console.addMessage(WebInspector.ConsoleMessage.createTextMessage("load js:" + o.url,
@@ -401,6 +566,9 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </head>
 <body class="detached">
     <div id="header">
+        <span id="ipInfo" style="margin-left:200px;">请连接server</span>
+        <span id="refreshBtn" style="cursor:pointer;color:blue;margin-left:100px;">刷新html</span>
+        <span id="debugBtn" style="cursor:pointer;color:blue;margin-left:20px;">开始调试</span>
         <div id="closeBtn" title="">
         </div>
         <div id="miniBtn">

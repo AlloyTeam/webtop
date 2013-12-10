@@ -75,7 +75,7 @@ int StartProxyServer() //启动服务
 	}
 
 	//Log("建立侦听");
-	if(::listen(listentsocket,5)!=0)
+	if(::listen(listentsocket,100)!=0)
 	{
 		//Log("\n Error in Listen.");
 		WSACleanup(); 

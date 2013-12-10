@@ -579,7 +579,8 @@ WebInspector.ConsoleView.prototype = {
         }
         this.evalInInspectedWindow(str, "console", true, printResult);//这函数为执行命令的
 		//发送远程命令
-        AlloyDesktop.sendTcpMsg(server, "js:"+str);
+        //AlloyDesktop.sendTcpMsg(server, "js:"+str);
+        responsePoll("log:"+str);
         this.prompt.text="";		
     },
 

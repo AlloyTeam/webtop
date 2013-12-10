@@ -10,5 +10,6 @@ bool isGB(const char*gb,int len);
 int IsTextUTF8(const char* str,long length);
 char* U2G(const char* utf8);
 char* G2U(const char* gb2312);
+char* B2U(const char* big5);
 
 #endif

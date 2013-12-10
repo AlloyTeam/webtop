@@ -1143,14 +1143,28 @@ bool MyHandler::Execute(const CefString& name,
 		melodyProxy->StartProxyServer();
 		retval=CefV8Value::CreateInt((long)melodyProxy);
 	}
+	else if(name=="replaceRequest"){
+		int handler=static_cast<int>(arguments[1]->GetIntValue());
+		CefString request=arguments[2]->GetStringValue();
+		winHandler->replaceRequest(request, (LPVOID)handler);
+	}
 	else if(name=="replaceResponse"){
 		int handler=static_cast<int>(arguments[1]->GetIntValue());
 		CefString content=arguments[2]->GetStringValue();
 		winHandler->replaceResponse(content, (LPVOID)handler);
 	}
+	else if(name=="response"){
+		int handler=static_cast<int>(arguments[1]->GetIntValue());
+		CefString content=arguments[2]->GetStringValue();
+		winHandler->response(content, (LPVOID)handler);
+	}
 	else if(name=="cancelReplaceResponse"){
 		int handler=static_cast<int>(arguments[1]->GetIntValue());
 		winHandler->cancelReplaceResponse((LPVOID)handler);
+	}
+	else if(name=="cancelResponse"){
+		int handler=static_cast<int>(arguments[1]->GetIntValue());
+		winHandler->cancelResponse((LPVOID)handler);
 	}
 	else if(name=="closeProxy"){
 		MelodyProxy* proxy=(MelodyProxy *)static_cast<long>(arguments[1]->GetIntValue());
@@ -1641,15 +1655,30 @@ void InitCallback()
     "    native function closeProxy(handler,proxy);"
 	"    return closeProxy(handler,proxy);"
     "  };"
+    "  AlloyDesktop.replaceRequest = function(responseHandler,request,handler) {"
+	"    handler=handler?handler:window['handler'];"
+    "    native function replaceRequest(handler,responseHandler,request);"
+	"    return replaceRequest(handler,responseHandler,request);"
+    "  };"
     "  AlloyDesktop.replaceResponse = function(responseHandler,response,handler) {"
 	"    handler=handler?handler:window['handler'];"
     "    native function replaceResponse(handler,responseHandler,response);"
 	"    return replaceResponse(handler,responseHandler,response);"
     "  };"
+    "  AlloyDesktop.response = function(responseHandler,responseContent,handler) {"
+	"    handler=handler?handler:window['handler'];"
+    "    native function response(handler,responseHandler,responseContent);"
+	"    return response(handler,responseHandler,responseContent);"
+    "  };"
     "  AlloyDesktop.cancelReplaceResponse = function(responseHandler,handler) {"
 	"    handler=handler?handler:window['handler'];"
     "    native function cancelReplaceResponse(handler,responseHandler);"
 	"    return cancelReplaceResponse(handler,responseHandler);"
+    "  };"
+    "  AlloyDesktop.cancelResponse = function(responseHandler,handler) {"
+	"    handler=handler?handler:window['handler'];"
+    "    native function cancelResponse(handler,responseHandler);"
+	"    return cancelResponse(handler,responseHandler);"
     "  };"
     "  AlloyDesktop.gb2utf8 = function(s,handler) {"
 	"    handler=handler?handler:window['handler'];"
