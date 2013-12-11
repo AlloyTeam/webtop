@@ -270,17 +270,18 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             header = header.replace(reg1, "\r\nContent-Length: " + mbStringLength(content) + "");
             var response1 = header + content;
             A.replaceResponse(handler, response1);
+            console.log(content);
         }
         addEventListener("AlloyDesktopReady", function () {
             server = AlloyDesktop.createTcpServer();
             proxy = AlloyDesktop.startProxy(8888);
-            ipInfo.innerHTML="请连接server " + A.getIP() + ":8888";
+            ipInfo.innerHTML = "请连接server " + A.getIP() + ":8888";
             WebInspector.currentPanel = WebInspector.panels.console;
             refreshBtn.onclick = function () {
-                A.sendTcpMsg(server, "getHtml");
+                responsePoll('dom:document.documentElement.outerHTML');
             }
             debugBtn.onclick = function () {
-                count=0;
+                count = 0;
             }
             header.onmousedown = function () {
                 AlloyDesktop.drag();
@@ -362,7 +363,9 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
              var reg = /\r\nContent-Type: ([^\r]*)/;
              var result = reg.exec(header);
              type = result[1];
-             if (type.indexOf("text/html")!=-1) {
+             console.log(header);
+             console.log(detail.content);
+             if (type.indexOf("text/html") != -1) {
                  guid = newGuid();
                  var reg1 = new RegExp("\\r\\nCache-Control: [^\r]*", "");
                  var header1 = header.replace(reg1, "\r\nCache-Control: no-cache");

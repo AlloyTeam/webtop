@@ -1500,7 +1500,6 @@ void TransparentWnd::agentRequest(char* header, char* content, LPVOID pParam){
 	EnterCriticalSection(&cs);
 	messageMap[guid1]=header;
 	messageMap[guid2]=content;
-	LeaveCriticalSection(&cs);
 	ss<<"var e = new CustomEvent('AlloyDesktopRecieveRequest',{"
 		"	detail:{"
 		"		handler:"<<handler<<","
@@ -1510,6 +1509,7 @@ void TransparentWnd::agentRequest(char* header, char* content, LPVOID pParam){
 		"});"<<
 		"dispatchEvent(e);";
 	ExecJS(ss.str());
+	LeaveCriticalSection(&cs);
 }
 void TransparentWnd::agentResponse(char* request, char* header, char* content, LPVOID pParam){
 	std::stringstream ss;

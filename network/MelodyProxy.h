@@ -26,6 +26,7 @@ using namespace std;
 class MelodyProxy{
 public:
 	//Proxy 端口
+	CRITICAL_SECTION cs;		//临界段
 	UINT pport;// = 8888;
 	bool agentRequest;
 	bool replaceResponse;
@@ -56,7 +57,6 @@ public:
 	{
 		char Address[256];		// 远程主机地址
 		char Cmd[10];		// 远程主机地址
-		//char URL[2048];		// 远程主机地址
 		HANDLE IsConnectedOK;	// PROXY 服务机到远程主机的联结状态
 		HANDLE IsExit;	// PROXY 服务机到远程主机的联结状态
 		HANDLE ReplaceResponseOK;	// PROXY 服务机到远程主机的联结状态
@@ -124,6 +124,7 @@ public:
 		//Log("启动侦听线程");
 		HANDLE threadhandle = (HANDLE)_beginthreadex(NULL, 0, UserToProxy, (LPVOID)this, NULL, NULL);
 		CloseHandle(threadhandle);
+		InitializeCriticalSection(&cs);
 		return 1;
 	}
 
@@ -158,6 +159,7 @@ public:
 
 	~MelodyProxy(){
 		closesocket(listentsocket);
+		DeleteCriticalSection(&cs);
 	}
 	//分析接收到的字符，得到远程主机地址
 	static int ResolveInformation( char * str, char* command, char *address, int * port)
@@ -732,12 +734,14 @@ public:
 		if(res<i){
 			//复制数据到content中
 			memcpy(buffer,seek+2,res);//复制到缓冲区中
+			buffer[res]=0;
 			*pBuffer=buffer+res;
 			return i-res;//返回剩余的chunk数据的长度
 		}
 		else{
 			memcpy(buffer,seek+2,i);//复制到缓冲区中
 			//下一个chunk的指针，剩余字符串长度，重新计算缓存区起始位置
+			buffer[i]=0;
 			*pBuffer=buffer+i;
 			res-=i+2;
 			if(res>0){

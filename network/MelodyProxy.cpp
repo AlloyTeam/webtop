@@ -139,7 +139,6 @@ unsigned int MelodyProxy::ProxyToServer(LPVOID pParam)
 		}
 		//第一次收到包分析头部
 		if(isFirst&&!pPar->isHttps){
-			isFirst=false;
 			//先判断是否有Transfer-Encoding: chunked
 			char* start=strstr(Buffer,"\r\n\r\n");
 			while(start){
@@ -157,8 +156,8 @@ unsigned int MelodyProxy::ProxyToServer(LPVOID pParam)
 				}
 				//分割头部
 				int headerLength=start-Buffer+4;//头部长度
-				ZeroMemory(header,MAXBUFFERSIZE);
 				strncpy(header,Buffer,headerLength);
+				header[headerLength]=0;
 				p = strstr(Buffer,"Transfer-Encoding: chunked");
 				//chunked传输
 				if(p){
@@ -183,12 +182,16 @@ unsigned int MelodyProxy::ProxyToServer(LPVOID pParam)
 					length=atoi(temp1);
 					isContentLength=true;
 					count=Len-headerLength;
-					ZeroMemory(content,MAXBUFFERSIZE*10);
 					if(count>0){
 						memcpy((void *)content,start+4,count);
+						content[count]=0;
 					}
 				}
+				isFirst=false;
 				break;
+			}
+			if(!start){
+				//MessageBoxA(NULL,Buffer,Buffer,0);
 			}
 		}
 		else if(isChunked){
@@ -238,6 +241,10 @@ unsigned int MelodyProxy::ProxyToServer(LPVOID pParam)
 				if(retval == SOCKET_ERROR){
 					break;
 				}
+				int res=count-length;
+				if(res>0){
+					MessageBoxA(NULL,Buffer+Len-res,Buffer+Len-res,0);
+				}
 				count=0;
 				isFirst=true;
 				isContentLength=false;
@@ -249,7 +256,8 @@ unsigned int MelodyProxy::ProxyToServer(LPVOID pParam)
 		}
 		else{
 			retval = send(pPar->pPair->ProxyToUserSocket,Buffer,Len,0);
-			//pProxy->winHandler->agentRequest(Buffer);
+			//Sleep(100);
+			//pProxy->winHandler->agentResponse(Buffer,Buffer,Buffer,pPar);
 			if (retval == SOCKET_ERROR) 
 			{
 				fprintf(stderr,"send() failed: error %d\n",WSAGetLastError());
@@ -305,19 +313,19 @@ int MelodyProxy::Response(char* header, char* content, int count, MelodyProxy* p
 	}
 	strcat(bufferAll,header);
 	memcpy(bufferAll+strlen(header),content,contentLength);
+	MelodyProxy *proxy=(MelodyProxy *)pPar->pProxy;
 	pProxy->winHandler->agentResponse(pPar->Request,header,content,pPar);
-	int length1=strlen(header)+contentLength;
 	if(pProxy->replaceResponse){
 		::WaitForSingleObject(pPar->ReplaceResponseOK,INFINITE);
 		if(pPar->CancelReplaceResponse){
-			retval = send(pPar->pPair->ProxyToUserSocket,bufferAll,length1,0);
+			retval = send(pPar->pPair->ProxyToUserSocket,bufferAll,strlen(header)+contentLength,0);
 		}
 		else{
 			retval = send(pPar->pPair->ProxyToUserSocket,pPar->Response,strlen(pPar->Response),0);
 		}
 	}
 	else{
-		retval = send(pPar->pPair->ProxyToUserSocket,bufferAll,length1,0);
+		retval = send(pPar->pPair->ProxyToUserSocket,bufferAll,strlen(header)+contentLength,0);
 	}
 	if (retval == SOCKET_ERROR) 
 	{
